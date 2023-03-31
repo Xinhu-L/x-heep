@@ -1,0 +1,709 @@
+# //  Questa Sim-64
+# //  Version 10.6g linux_x86_64 Aug  2 2019
+# //
+# //  Copyright 1991-2019 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# OpenFile tbench.sv
+vsim -novopt work.tbench
+# vsim -novopt work.tbench 
+# Start time: 13:14:37 on Mar 28,2023
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.tbench
+# Loading sv_std.std
+# Loading work.tbench
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.tinyODIN
+# Loading work.tinyODIN
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.aer_out
+# Loading work.aer_out
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.spi_slave
+# Loading work.spi_slave
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.controller
+# Loading work.controller
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.scheduler
+# Loading work.scheduler
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.fifo
+# Loading work.fifo
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.synaptic_core
+# Loading work.synaptic_core
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.SRAM_8192x32_wrapper
+# Loading work.SRAM_8192x32_wrapper
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.neuron_core
+# Loading work.neuron_core
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.lif_neuron
+# Loading work.lif_neuron
+# Refreshing /home/xinhu/x-heep/hw/vendor/tinyODIN/work.SRAM_256x32_wrapper
+# Loading work.SRAM_256x32_wrapper
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AERIN_ADDR
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AERIN_REQ
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AERIN_ACK
+add wave -position insertpoint  \
+sim:/tbench/snn_0/MOSI
+view -new wave
+# .main_pane.wave1.interior.cs.body.pw.wf
+add wave -position insertpoint  \
+sim:/tbench/snn_0/MISO
+add wave -position insertpoint  \
+sim:/tbench/snn_0/MISO
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AEROUT_ADDR
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AEROUT_REQ
+add wave -position insertpoint  \
+sim:/tbench/snn_0/AEROUT_ACK
+view -new wave
+# .main_pane.wave1.interior.cs.body.pw.wf
+add wave -position insertpoint  \
+sim:/tbench/snn_0/neuron_core_0/neurarray_0/SRAM
+add wave -position insertpoint  \
+sim:/tbench/snn_0/neuron_core_0/neurarray_0/SRAM
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# programming synapses... (i=500/8192)
+# programming synapses... (i=1000/8192)
+# Break key hit
+# Break in Module tbench at /home/xinhu/x-heep/hw/vendor/tinyODIN/tbench.sv line 114
+add wave -position insertpoint  \
+sim:/tbench/CLK
+run -all
+# programming synapses... (i=1500/8192)
+# Break key hit
+# Break in Module fifo at /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v line 100
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# programming synapses... (i=500/8192)
+# programming synapses... (i=1000/8192)
+# Break key hit
+# Simulation stop requested.
+add wave -position 1  sim:/tbench/RST
+add wave -position 2  sim:/tbench/SPI_param_checked
+add wave -position 3  sim:/tbench/SNN_initialized_rdy
+add wave -position 2  sim:/tbench/SPI_config_rdy
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# Break key hit
+# Break in Module fifo at /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v line 100
+# Causality operation skipped due to absence of debug database file
+add wave -position 5  sim:/tbench/snn_0/SPI_GATE_ACTIVITY
+add wave -position 6  sim:/tbench/snn_0/SPI_OPEN_LOOP
+add wave -position 7  sim:/tbench/snn_0/SPI_AER_SRC_CTRL_nNEUR
+add wave -position 8  sim:/tbench/snn_0/SPI_MAX_NEUR
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# Break key hit
+# Simulation stop requested.
+add wave -position 2  sim:/tbench/SCK
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# Break key hit
+# Break in Module fifo at /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v line 100
+add wave -position insertpoint  \
+sim:/tbench/snn_0/synaptic_core_0/synarray_0/SRAM
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# programming synapses... (i=500/8192)
+# programming synapses... (i=1000/8192)
+# Break key hit
+# Break in Module fifo at /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v line 100
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# programming synapses... (i=500/8192)
+# programming synapses... (i=1000/8192)
+# programming synapses... (i=1500/8192)
+# programming synapses... (i=2000/8192)
+# programming synapses... (i=2500/8192)
+# programming synapses... (i=3000/8192)
+# programming synapses... (i=3500/8192)
+# programming synapses... (i=4000/8192)
+# programming synapses... (i=4500/8192)
+# programming synapses... (i=5000/8192)
+# programming synapses... (i=5500/8192)
+# programming synapses... (i=6000/8192)
+# programming synapses... (i=6500/8192)
+# programming synapses... (i=7000/8192)
+# programming synapses... (i=7500/8192)
+# programming synapses... (i=8000/8192)
+# ----- Ending programmation of all synapses in the SNN through SPI.
+# ----- Starting verification of all synapses in the SNN through SPI.
+# verifying synapses... (i=0/8192)
+# verifying synapses... (i=500/8192)
+# verifying synapses... (i=1000/8192)
+# verifying synapses... (i=1500/8192)
+# verifying synapses... (i=2000/8192)
+# verifying synapses... (i=2500/8192)
+# verifying synapses... (i=3000/8192)
+# verifying synapses... (i=3500/8192)
+# verifying synapses... (i=4000/8192)
+# verifying synapses... (i=4500/8192)
+# verifying synapses... (i=5000/8192)
+# verifying synapses... (i=5500/8192)
+# verifying synapses... (i=6000/8192)
+# verifying synapses... (i=6500/8192)
+# verifying synapses... (i=7000/8192)
+# verifying synapses... (i=7500/8192)
+# verifying synapses... (i=8000/8192)
+# Break key hit
+# Break in Module fifo at /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v line 100
+add wave -position 13  sim:/tbench/addr_temp
+restart
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+add wave -position end  sim:/tbench/AEROUT_ADDR
+add wave -position 20  sim:/tbench/snn_0/neuron_core_0/neurarray_0/SRAM
+add wave -position 14  sim:/tbench/i
+add wave -position 15  sim:/tbench/j
+add wave -position end  sim:/tbench/snn_0/neuron_core_0/NEUR_STATE
+add wave -position end  sim:/tbench/snn_0/neuron_core_0/NEUR_EVENT_OUT
+run -all
+# ----- Starting verification of programmed SNN parameters
+# ----- Ending verification of programmed SNN parameters, no error found!
+# ----- Starting programmation of neuron memory in the SNN through SPI.
+# programming neurons... (i=0/256)
+# programming neurons... (i=10/256)
+# programming neurons... (i=20/256)
+# programming neurons... (i=30/256)
+# programming neurons... (i=40/256)
+# programming neurons... (i=50/256)
+# programming neurons... (i=60/256)
+# programming neurons... (i=70/256)
+# programming neurons... (i=80/256)
+# programming neurons... (i=90/256)
+# programming neurons... (i=100/256)
+# programming neurons... (i=110/256)
+# programming neurons... (i=120/256)
+# programming neurons... (i=130/256)
+# programming neurons... (i=140/256)
+# programming neurons... (i=150/256)
+# programming neurons... (i=160/256)
+# programming neurons... (i=170/256)
+# programming neurons... (i=180/256)
+# programming neurons... (i=190/256)
+# programming neurons... (i=200/256)
+# programming neurons... (i=210/256)
+# programming neurons... (i=220/256)
+# programming neurons... (i=230/256)
+# programming neurons... (i=240/256)
+# programming neurons... (i=250/256)
+# ----- Ending programmation of neuron memory in the SNN through SPI.
+# ----- Starting verification of neuron memory in the SNN through SPI.
+# verifying neurons... (i=0/256)
+# verifying neurons... (i=10/256)
+# verifying neurons... (i=20/256)
+# verifying neurons... (i=30/256)
+# verifying neurons... (i=40/256)
+# verifying neurons... (i=50/256)
+# verifying neurons... (i=60/256)
+# verifying neurons... (i=70/256)
+# verifying neurons... (i=80/256)
+# verifying neurons... (i=90/256)
+# verifying neurons... (i=100/256)
+# verifying neurons... (i=110/256)
+# verifying neurons... (i=120/256)
+# verifying neurons... (i=130/256)
+# verifying neurons... (i=140/256)
+# verifying neurons... (i=150/256)
+# verifying neurons... (i=160/256)
+# verifying neurons... (i=170/256)
+# verifying neurons... (i=180/256)
+# verifying neurons... (i=190/256)
+# verifying neurons... (i=200/256)
+# verifying neurons... (i=210/256)
+# verifying neurons... (i=220/256)
+# verifying neurons... (i=230/256)
+# verifying neurons... (i=240/256)
+# verifying neurons... (i=250/256)
+# ----- Ending verification of neuron memory in the SNN through SPI, no error found!
+# ----- Starting programmation of all synapses in the SNN through SPI.
+# programming synapses... (i=0/8192)
+# programming synapses... (i=500/8192)
+# programming synapses... (i=1000/8192)
+# programming synapses... (i=1500/8192)
+# programming synapses... (i=2000/8192)
+# programming synapses... (i=2500/8192)
+# programming synapses... (i=3000/8192)
+# programming synapses... (i=3500/8192)
+# programming synapses... (i=4000/8192)
+# programming synapses... (i=4500/8192)
+# programming synapses... (i=5000/8192)
+# programming synapses... (i=5500/8192)
+# programming synapses... (i=6000/8192)
+# programming synapses... (i=6500/8192)
+# programming synapses... (i=7000/8192)
+# programming synapses... (i=7500/8192)
+# programming synapses... (i=8000/8192)
+# ----- Ending programmation of all synapses in the SNN through SPI.
+# ----- Starting verification of all synapses in the SNN through SPI.
+# verifying synapses... (i=0/8192)
+# verifying synapses... (i=500/8192)
+# verifying synapses... (i=1000/8192)
+# verifying synapses... (i=1500/8192)
+# verifying synapses... (i=2000/8192)
+# verifying synapses... (i=2500/8192)
+# verifying synapses... (i=3000/8192)
+# verifying synapses... (i=3500/8192)
+# verifying synapses... (i=4000/8192)
+# verifying synapses... (i=4500/8192)
+# verifying synapses... (i=5000/8192)
+# verifying synapses... (i=5500/8192)
+# verifying synapses... (i=6000/8192)
+# verifying synapses... (i=6500/8192)
+# verifying synapses... (i=7000/8192)
+# verifying synapses... (i=7500/8192)
+# verifying synapses... (i=8000/8192)
+# ----- Ending verification of all synapses in the SNN through SPI, no error found!
+# ----- Disabling neurons 0 to 255.
+# ----- Programming neurons done...
+# --- Starting phase           0.
+# ----- Starting programming of neurons 0,1,3,13,27,38,53,62,100,119,140,169,194,248,250,255.
+# ----- Starting stimulation pattern.
+# ----- Starting stimulation pattern.
+# --- Starting phase           1.
+# ----- Starting programming of neurons 0,1,3,13,27,38,53,62,100,119,140,169,194,248,250,255.
+# ----- Starting stimulation pattern.
+# ----- Starting stimulation pattern.
+# ----- NEURON OUTPUT SPIKE (FROM AER): Event from neuron   3
+# ----- NEURON OUTPUT SPIKE (FROM AER): Event from neuron   0
+# ----- NEURON OUTPUT SPIKE (FROM AER): Event from neuron   1
+# ----- NEURON OUTPUT SPIKE (FROM AER): Event from neuron   0
+# ----- No error found -- All tests passed! :-)
+# ** Note: $finish    : /home/xinhu/x-heep/hw/vendor/tinyODIN/tbench.sv(552)
+#    Time: 145938501 ns  Iteration: 0  Instance: /tbench
+# 1
+# Break in Module tbench at /home/xinhu/x-heep/hw/vendor/tinyODIN/tbench.sv line 552
+# End time: 22:29:58 on Mar 28,2023, Elapsed time: 9:15:21
+# Errors: 0, Warnings: 1

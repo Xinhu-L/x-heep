@@ -1,0 +1,73 @@
+/home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/fifo.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module fifo
+
+Top level modules:
+	fifo
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/controller.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/controller.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module controller
+
+Top level modules:
+	controller
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/lif_neuron.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/lif_neuron.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module lif_neuron
+
+Top level modules:
+	lif_neuron
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/tinyODIN.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/tinyODIN.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module tinyODIN
+
+Top level modules:
+	tinyODIN
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/spi_slave.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/spi_slave.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module spi_slave
+
+Top level modules:
+	spi_slave
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/tbench.sv {1 {vlog -work work -vopt -sv -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/tbench.sv
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module tbench
+
+Top level modules:
+	tbench
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/synaptic_core.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/synaptic_core.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module synaptic_core
+-- Compiling module SRAM_8192x32_wrapper
+
+Top level modules:
+	synaptic_core
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/scheduler.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/scheduler.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module scheduler
+
+Top level modules:
+	scheduler
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/neuron_core.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/neuron_core.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module neuron_core
+-- Compiling module SRAM_256x32_wrapper
+
+Top level modules:
+	neuron_core
+
+} {} {}} /home/xinhu/x-heep/hw/vendor/tinyODIN/aer_out.v {1 {vlog -work work -vopt -stats=none /home/xinhu/x-heep/hw/vendor/tinyODIN/aer_out.v
+QuestaSim-64 vlog 10.6g Compiler 2019.08 Aug  2 2019
+-- Compiling module aer_out
+
+Top level modules:
+	aer_out
+
+} {} {}}

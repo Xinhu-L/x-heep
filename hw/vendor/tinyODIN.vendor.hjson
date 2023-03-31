@@ -1,0 +1,15 @@
+// Copyright 2020 OpenHW Group
+// Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+{
+  name: "tinyODIN",
+  target_dir: "tinyODIN",
+
+  upstream: {
+    url: "https://github.com/ChFrenkel/tinyODIN.git",
+    rev: "e3206b5",
+  },
+
+  patch_dir: "patches/tinyODIN",
+
+}

@@ -1,0 +1,23 @@
+CAPI=2:
+
+# Copyright 
+# Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+
+name: "tinyODIN"
+
+fileset:
+  rtl:
+    files:
+    - ./lif_neuron.v
+    - ./fifo.v
+    - ./controller.v
+    - ./spi_slave.v
+    - ./aer_out.v
+    - ./synaptic_core.v
+    - ./scheduler.v
+    - ./neuron_core.v
+    - ./tiny_ODIN.v
+  tinyODIN-sdc:
+    files:
+    - ./tinyODIN.sdc : {file_type: SDC}
