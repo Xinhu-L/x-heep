@@ -144,6 +144,9 @@
     ext_slaves: {
         address: 0xF0000000,
         length:  0x01000000,
+        tinyODIN: {
+            offset: 0x00000000,
+            length: 0x00010000,
     },
 
     interrupts: {
@@ -200,6 +203,7 @@
             intr_ack_stop:           47,
             intr_host_timeout:       48,
             spi2_intr_event:         49,
+            intr_ODIN_finished:      50,
         }
     }
 }

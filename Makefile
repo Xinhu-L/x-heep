@@ -42,7 +42,7 @@ PAD_CFG  ?= pad_cfg.hjson
 COMPILER ?= gcc
 
 # Arch options are any RISC-V ISA string supported by the CPU. Default 'rv32imc'
-ARCH     ?= rv32imc
+ARCH     ?= rv32imfc
 
 # Path relative from the location of sw/Makefile from which to fetch source files. The directory of that file is the default value.
 SOURCE 	 ?= "."
