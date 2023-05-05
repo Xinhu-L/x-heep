@@ -12,6 +12,8 @@ parameter type rsp_t = obi_pkg::obi_resp_t;
 
 bit CLK;
 bit RSTN;
+bit RST;
+assign RST = ~RSTN;
 
 initial begin
     CLK = 1'b0;
@@ -24,9 +26,11 @@ logic start;
 logic control;
 
 logic [INPUT_RESO-1:0] tick;
+logic                  next_tick;
 
 req_t spikecore_slave_req;
 rsp_t spikecore_slave_resp;
+logic spikecore_done;
 
 logic LIF_busy;
 logic LIF_done;
@@ -64,68 +68,66 @@ logic                   FIFO_empty;
 logic [M-1:0]           FIFO_w_data;
 logic [M-1:0]           FIFO_r_data;
 
+// TOP LEVEL SIMULATION
+req_t tinyODIN_slave_req;
+rsp_t tinyODIN_slave_resp;
+
 initial begin
     #100
         AEROUT_REQ = 1'b0;
         write_weight_spikecore(
-            .addr(32'h00000000),
-            .data(32'hfffe_faff),
-            .spike_core_req_i(spikecore_slave_req));
-    #100    
-        write_weight_spikecore(
-            .addr(32'h00000001),
-            .data(32'hfaff_fbcf),
-            .spike_core_req_i(spikecore_slave_req));
-    #100 
-        write_weight_spikecore(
-            .addr(32'h0000_003f),
-            .data(32'h0001_1011),
-            .spike_core_req_i(spikecore_slave_req));
-    #10
-        spikecore_slave_req.req  = 1'b0;
-    #5
-        start = 1'b1;
-        LIF_busy = 1'b0;
-        LIF_done = 1'b1;
-        tick  = 8'hff;
-    #10
-        LIF_busy = 1'b1;
-        LIF_done = 1'b0;
-    #500
-        LIF_busy = 1'b0;
-        LIF_done = 1'b1;
-    #500
-        tick  = 8'hfe;
-    #500
-        tick  = 8'hfd;
-    #500 
-        tick  = 8'h11;
+            .addr(6'd0),
+            .data(32'hfffe_ffaf),
+            .tinyODIN_slave_req_i(tinyODIN_slave_req));
+
 
 end
 
-spike_core
+TTFS_tinyODIN
 #(
     .N(N),
     .M(M),
     .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
-)spike_core_top(
+) TTFS_tinyODIN (
     .CLK,
-    .RSTN,
-    .start_i(start),
-    .control_i(control),
-    .tick_i(tick),
-    .spikecore_slave_req_i(spikecore_slave_req),
-    .spikecore_slave_resp_o(spikecore_slave_resp),
-    .LIF_busy_i(LIF_busy),
-    .LIF_done_i(LIF_done),
-    .AER_ADDR_o(AER_ADDR),
-    .AER_REQ_o(AER_REQ),
-    .AER_ACK_i(AER_ACK),
-    .AEROUT_REQ_i(AEROUT_REQ),
-    .out_spike_addr_i(out_spike_addr)
+    .RST,
+    .tinyODIN_slave_req_i(tinyODIN_slave_req),
+    .tinyODIN_slave_resp_o(tinyODIN_slave_resp)
 );
+
+
+// spike_core
+// #(
+//     .N(N),
+//     .M(M),
+//     .INPUT_RESO(INPUT_RESO),
+//     .req_t(req_t),
+//     .rsp_t(rsp_t)
+// )spike_core_top(
+//     .CLK,
+//     .RSTN,
+//     .start_i(start),
+//     .control_i(control),
+//     .tick_i(tick),
+//     .next_tick_i(next_tick),
+//     .spikecore_slave_req_i(spikecore_slave_req),
+//     .spikecore_slave_resp_o(spikecore_slave_resp),
+//     .spikecore_done_o(spikecore_done),
+
+//     .FIFO_r_en_i(FIFO_r_en),
+//     .FIFO_r_data_o(FIFO_r_data),
+//     .FIFO_empty_o(FIFO_empty),
+
+//     // .LIF_busy_i(LIF_busy),
+//     // .LIF_done_i(LIF_done),
+//     // .AER_ADDR_o(AER_ADDR),
+//     // .AER_REQ_o(AER_REQ),
+//     // .AER_ACK_i(AER_ACK),
+//     .AEROUT_REQ_i(AEROUT_REQ),
+//     .out_spike_addr_i(out_spike_addr)
+// );
 
 
 // sram_spike sram_spike_tb (
@@ -192,35 +194,34 @@ spike_core
 // );
 
 task write_weight_spikecore(
-    input  logic [31:0] addr,
+    input  logic [5:0] addr,
     input  logic [31:0] data,
-    output req_t spike_core_req_i
+    output req_t tinyODIN_slave_req_i
 );
     #5 
-        spike_core_req_i.req  = 1'b1;
-        spike_core_req_i.we   = 1'b1;
-        spike_core_req_i.be   = 4'b0000;
-        spike_core_req_i.addr = addr;
-        spike_core_req_i.wdata = data; 
+    tinyODIN_slave_req_i.req  = 1'b1;
+    tinyODIN_slave_req_i.we   = 1'b1;
+    tinyODIN_slave_req_i.be   = 4'b0000;
+    tinyODIN_slave_req_i.addr = {26'b0,addr};
+    tinyODIN_slave_req_i.wdata = data; 
 
-
-    
+    #5
+    tinyODIN_slave_req_i.req  = 1'b1;
 endtask
 
 task read_weight_spikecore(
-    input  logic [31:0] addr,
+    input  logic [5:0] addr,
     input  logic [31:0] data,
-    output req_t spike_core_req_i
+    output req_t tinyODIN_slave_req_i
 );
     #5 
-        spike_core_req_i.req  = 1'b1;
-        spike_core_req_i.we   = 1'b0;
-        spike_core_req_i.be   = 4'b0000;
-        spike_core_req_i.addr = addr;
-        spike_core_req_i.wdata = data; 
-
-
-    
+    tinyODIN_slave_req_i.req  = 1'b1;
+    tinyODIN_slave_req_i.we   = 1'b0;
+    tinyODIN_slave_req_i.be   = 4'b0000;
+    tinyODIN_slave_req_i.addr = {26'b0,addr};
+    tinyODIN_slave_req_i.wdata = data; 
+    #5 
+    tinyODIN_slave_req_i.req  = 1'b0;
 endtask
 
 task apply_rst();

@@ -8,26 +8,30 @@ import obi_pkg::*;
     parameter type              req_t = logic, // OBI request type
     parameter type              resp_t = logic  // OBI response type
 ) (
-    input  logic                 CLK,
-    input  logic                 RSTN,
+    input  logic                    CLK,
+    input  logic                    RSTN,
 
     // Start filter
-    input  logic                 start_i,
+    input  logic                    start_i,
 
     // Intereact with Spike Core
-    input  logic [31:0]           filter_spike_i, 
-    output logic [$clog2(N)-3:0]  filter_addr_o,
-    output logic                  filter_o,
+    input  logic [31:0]             filter_spike_i, 
+    output logic [$clog2(N)-3:0]    filter_addr_o,
+    output logic                    filter_o,
 
     // From Tick generator
-    input  logic [INPUT_RESO-1:0]  tick_i,
+    input  logic [INPUT_RESO-1:0]   tick_i,
+    input  logic                    next_tick_i,
+
+    // Finished
+    output logic                    spikecore_done_o,
 
     // Inform FIFO
-    output logic                  FIFO_w_en_o,
-    output logic [M-1:0]          FIFO_w_data_o,
-    input  logic                  FIFO_empty_i,
+    output logic                    FIFO_w_en_o,
+    output logic [M-1:0]            FIFO_w_data_o,
+    input  logic                    FIFO_empty_i,
     //To-Do: When full, stop writting
-    input  logic                  FIFO_full_i
+    input  logic                    FIFO_full_i
 );
 logic [$clog2(N)-3:0]  filter_addr;
 
@@ -52,10 +56,11 @@ logic [($clog2(N/(32/INPUT_RESO)))-1:0] fetch_counter;
 logic [$clog2(32/INPUT_RESO)-1:0]       check_counter;
 
 enum logic[2:0] { 
-    IDLE  = 3'b000,
-    FETCH = 3'b001,
-    CHECK  = 3'b010,
-    PUSH  = 3'b011
+    IDLE    = 3'd0,
+    FETCH   = 3'd1,
+    CHECK   = 3'd2,
+    PUSH    = 3'd3,
+    DONE    = 3'd4
 } state, next_state;
 
 always_ff @( posedge CLK or negedge RSTN ) begin : state_jump
@@ -82,7 +87,7 @@ always_comb begin : state_jump_condition
             next_state = CHECK;
         end
         else if (fetch_counter==6'h3f) begin
-            next_state = IDLE;
+            next_state = DONE;
         end
         else begin
             next_state = FETCH;
@@ -106,10 +111,18 @@ always_comb begin : state_jump_condition
             next_state = FETCH;
         end
         else if (fetch_counter==6'h3f) begin
-            next_state = IDLE;
+            next_state = DONE;
         end
         else begin
             next_state = CHECK;
+        end
+    end
+    DONE:begin
+        if(next_tick_i==2'b01) begin
+            next_state = IDLE;
+        end
+        else begin
+            next_state = DONE;
         end
     end
     default begin
@@ -123,26 +136,33 @@ end
 always_comb begin 
     if(!RSTN) begin
         filter_o        = 'b0;
-        FIFO_w_en_o     = 'b0;   
+        FIFO_w_en_o     = 'b0;  
+        spikecore_done_o= 'b0; 
     end
     else if (state==FETCH) begin
-        filter_o        = 1'b1;
-        FIFO_w_en_o     = 1'b0;
-        // To-Do: 32bit read from spike FIFO
+        filter_o        = 'b1;
+        FIFO_w_en_o     = 'b0;
+        spikecore_done_o= 'b0;
     end
     else if (state==CHECK) begin
         filter_o        = 'b0;
         FIFO_w_en_o     = 'b0;
-        
+        spikecore_done_o= 'b0;
     end
     else if (state==PUSH) begin
-        filter_o        = 1'b0;
-        FIFO_w_en_o     = 1'b1;
-        // To-Do: Check the equivelent tick to and push to FIFO
+        filter_o        = 'b0;
+        FIFO_w_en_o     = 'b1;
+        spikecore_done_o= 'b0;
+    end
+    else if (state==DONE) begin
+        filter_o        = 'b0;
+        FIFO_w_en_o     = 'b0;
+        spikecore_done_o= 'b1;
     end
     else begin
         filter_o        = 'b0;
         FIFO_w_en_o     = 'b0;
+        spikecore_done_o= 'b0;
     end
 end
 
@@ -167,6 +187,12 @@ always_ff @( posedge CLK or negedge RSTN ) begin
 
     end
     else if (state==PUSH) begin
+        fetch_counter <= fetch_counter;
+        check_counter <= check_counter;
+        filter_addr   <= filter_addr;
+        FIFO_w_data_o <= FIFO_w_data_o;
+    end
+    else if (state==DONE) begin
         fetch_counter <= fetch_counter;
         check_counter <= check_counter;
         filter_addr   <= filter_addr;

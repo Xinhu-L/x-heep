@@ -8,27 +8,37 @@ import obi_pkg::*;
     parameter type              req_t = logic, // OBI request type
     parameter type              rsp_t = logic  // OBI response type
 ) (
-    input  logic                    CLK,
-    input  logic                    RSTN,
+    input   logic                       CLK,
+    input   logic                       RSTN,
     
     //Start Singal from controller
-    input  logic                    start_i,
-    input  logic                    control_i,
+    input   logic                       start_i,
+    input   logic                       control_i,
 
     // TTFS time tick 
-    input  logic [INPUT_RESO-1:0]   tick_i,
+    input   logic [INPUT_RESO-1:0]      tick_i,
+    input   logic                       next_tick_i,
     
     // OBI BUS Slave interface
-    input  req_t                    spikecore_slave_req_i,
-    output rsp_t                    spikecore_slave_resp_o,
+    input   req_t                       spikecore_slave_req_i,
+    output  rsp_t                       spikecore_slave_resp_o,
 
-    // LIF signal
-    input  logic                    LIF_busy_i,
-    input  logic                    LIF_done_i,
-    // AERIN signal
-    output logic  [M+1:0]           AER_ADDR_o,
-    output logic                    AER_REQ_o,
-    input  logic                    AER_ACK_i,
+    // Spikecore finished
+    output  logic                       spikecore_done_o,
+
+    // FIFO output
+    input   logic                       FIFO_r_en_i,
+    output  logic [M-1:0]               FIFO_r_data_o,
+    output  logic                       FIFO_empty_o,
+
+    
+    // // LIF signal
+    // input  logic                    LIF_busy_i,
+    // input  logic                    LIF_done_i,
+    // // AERIN signal
+    // output logic  [M+1:0]           AER_ADDR_o,
+    // output logic                    AER_REQ_o,
+    // input  logic                    AER_ACK_i,
 
     // SPike from AER OUT
     input  logic                    AEROUT_REQ_i,
@@ -111,6 +121,9 @@ spike_filter
     .filter_o(filtering),
 
     .tick_i(tick_i),
+    .next_tick_i(next_tick_i),
+
+    .spikecore_done_o(spikecore_done_o),
 
     .FIFO_w_en_o(FIFO_w_en),
     .FIFO_w_data_o(FIFO_w_data),
@@ -126,32 +139,32 @@ spike_FIFO
     .CLK,
     .RSTN,
     .FIFO_w_en_i(FIFO_w_en),
-    .FIFO_r_en_i(FIFO_r_en),
+    .FIFO_r_en_i(FIFO_r_en_i),
     .FIFO_full_o(FIFO_full),
-    .FIFO_empty_o(FIFO_empty),
+    .FIFO_empty_o(FIFO_empty_o),
     .FIFO_w_data_i(FIFO_w_data),
-    .FIFO_r_data_o(FIFO_r_data)
+    .FIFO_r_data_o(FIFO_r_data_o)
 );
 
-spike_out
-#(
-    .N(256),
-    .M(8)
-)spike_out_i(
-    .CLK,
-    .RSTN,
-    .start_i(start_i),
-    .LIF_busy_i,
-    .LIF_done_i,
-    .control_i,
-    .FIFO_empty_i(FIFO_empty),
-    .FIFO_r_en_o(FIFO_r_en),
-    .FIFO_r_data_i(FIFO_r_data),
-    .AER_ADDR_o,
-    .AER_REQ_o,
-    .AER_ACK_i
+// spike_out
+// #(
+//     .N(256),
+//     .M(8)
+// )spike_out_i(
+//     .CLK,
+//     .RSTN,
+//     .start_i(start_i),
+//     .LIF_busy_i,
+//     .LIF_done_i,
+//     .control_i,
+//     .FIFO_empty_i(FIFO_empty),
+//     .FIFO_r_en_o(FIFO_r_en),
+//     .FIFO_r_data_i(FIFO_r_data),
+//     .AER_ADDR_o,
+//     .AER_REQ_o,
+//     .AER_ACK_i
 
-);
+// );
 
 sram_spike 
 #(
@@ -186,10 +199,10 @@ module sram_spike #(
     
     always_ff @( posedge ~CLK ) begin : SRAM_SPIKE
         if (EN && WE) begin
-            spike[4*ADDR] = WDATA[7:0];
-            spike[4*ADDR+1] = WDATA[15:8];
-            spike[4*ADDR+2] = WDATA[23:16];
-            spike[4*ADDR+3] = WDATA[31:24];
+            spike[4*ADDR] <= WDATA[7:0];
+            spike[4*ADDR+1] <= WDATA[15:8];
+            spike[4*ADDR+2] <= WDATA[23:16];
+            spike[4*ADDR+3] <= WDATA[31:24];
         end
         if(EN) begin
             temp <= EN ? {spike[4*ADDR+3],spike[4*ADDR+2],spike[4*ADDR+1],spike[4*ADDR]} : temp;

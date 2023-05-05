@@ -74,7 +74,7 @@ always_comb begin
     end
     else if (state==IDLE) begin
         FIFO_r_en_o         = 'b0;
-        AER_REQ_o           = AER_REQ_o;
+        AER_REQ_o           = 'b0;
     end
     else if (state==READ) begin
         FIFO_r_en_o         = 'b1;
