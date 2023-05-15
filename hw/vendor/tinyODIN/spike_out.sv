@@ -1,3 +1,4 @@
+// TODO: output spike pushed back to spike core
 module spike_out #(
     parameter                   N = 256,
     parameter                   M = 8

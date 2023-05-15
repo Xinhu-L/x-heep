@@ -107,11 +107,11 @@ always_comb begin : state_jump_condition
         end
     end
     PUSH:begin
-        if(check_counter==2'b00) begin
-            next_state = FETCH;
-        end
-        else if (fetch_counter==6'h3f) begin
+        if (fetch_counter==6'h0) begin
             next_state = DONE;
+        end
+        else if(check_counter==2'b00) begin
+            next_state = FETCH;
         end
         else begin
             next_state = CHECK;

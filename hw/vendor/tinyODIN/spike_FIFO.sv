@@ -64,7 +64,7 @@ always_ff @( posedge CLK or negedge RSTN ) begin
     end
 end
 
-always_ff @( posedge CLK or negedge RSTN ) begin : blockName
+always_ff @( posedge CLK or negedge RSTN ) begin 
     if (!RSTN) begin
         FIFO_r_data_o <= 'b0;
     end

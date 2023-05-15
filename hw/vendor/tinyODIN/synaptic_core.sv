@@ -35,12 +35,13 @@ module synaptic_core #(
     
     // Global inputs ------------------------------------------
     input   logic                   CLK,
-    input   logic                   RST,
+    input   logic                   RSTN,
     
     // Inputs from controller ---------------------------------
     input   logic                   neuron_event_i,
     input   logic [   M-1:0]        neuron_idx_i,
     input   logic [   M-1:0]        count_i,
+    input   logic                   charge_enable_i,
     
     // Outputs ------------------------------------------------
     output  logic [   31:0]         synapse_data_o,
@@ -56,14 +57,15 @@ module synaptic_core #(
     logic [31:0]    synarray_wdata,synarray_rdata; 
     logic           synarray_valid;
        
-    assign synarray_cs      = neuron_event_i || synapsecore_slave_req_i.req;
+    assign synarray_cs      = neuron_event_i || charge_enable_i || synapsecore_slave_req_i.req;
     assign synarray_we      = synapsecore_slave_req_i.we;
-    assign synarray_addr    = neuron_event_i ? {neuron_idx_i,count_i[7:3]} : synapsecore_slave_req_i.req ? synapsecore_slave_req_i.addr : 'b0;
+    assign synarray_addr    = neuron_event_i ? {neuron_idx_i,count_i[7:3]} : charge_enable_i ? {neuron_idx_i,count_i[4:0]} : synapsecore_slave_req_i.req ? synapsecore_slave_req_i.addr : 'b0;
+    assign synarray_wdata   = synapsecore_slave_req_i.wdata;
     assign synapse_data_o   = synarray_rdata;
     // OBI interface
 
-    always_ff @(posedge CLK or posedge RST) begin
-        if (RST) begin
+    always_ff @(posedge CLK or negedge RSTN) begin
+        if (!RSTN) begin
         synarray_valid <= '0;
         end else begin
         synarray_valid <= synapsecore_slave_resp_o.gnt;
@@ -90,7 +92,7 @@ module synaptic_core #(
     SRAM_8192x32_wrapper synarray_0 (
         
         // Global inputs
-        .CK         (CLK),
+        .CK         (~CLK),
 	
 		// Control and data inputs
 		.CS         (synarray_cs),

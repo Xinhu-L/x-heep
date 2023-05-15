@@ -4,15 +4,17 @@ import obi_pkg::*;
     parameter N = 256,
     parameter M = 8,
     parameter INPUT_RESO = 8,
-    parameter type         req_t = obi_pkg::obi_req_t, // OBI request type
-    parameter type         rsp_t = obi_pkg::obi_resp_t  // OBI response type
+    parameter type         req_t = logic, // OBI request type
+    parameter type         rsp_t = logic  // OBI response type
 
 ) (
     input   logic                       CLK,
-    input   logic                       RST,
+    input   logic                       RSTN,
 
     input   logic                       spikecore_done_i,
     input   logic                       ODIN_done_i,
+
+    input   logic                       inference_done_i,
 
     output  logic   [INPUT_RESO-1:0]    tick_o,
     output  logic                       next_tick_o
@@ -21,12 +23,16 @@ import obi_pkg::*;
 
 logic [INPUT_RESO-1:0]  tick;
 
-assign next_tick_o = spikecore_done_i && ODIN_done_i;
+assign tick_o           = tick;
+assign next_tick_o      = spikecore_done_i && ODIN_done_i;
 
 
-always_ff @( posedge CLK or posedge RST ) begin 
-    if(RST)begin
-        tick <= 'b1;
+always_ff @( posedge CLK or negedge RSTN ) begin 
+    if(!RSTN)begin
+        tick        <= 8'd255;
+    end
+    else if (inference_done_i) begin
+        tick        <= 8'd255;
     end
     else if (spikecore_done_i && ODIN_done_i) begin
         tick        <= tick - 'b1;

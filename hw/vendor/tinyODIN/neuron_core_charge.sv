@@ -27,7 +27,7 @@
 
 `include "./obi_pkg.sv"
 
-module neuron_core 
+module neuron_core_charge 
 import obi_pkg::*;
 #(
     parameter N = 256,
@@ -69,7 +69,7 @@ import obi_pkg::*;
     logic           req_we;
 
     // Input Weight select
-    logic [    3:0] syn_weight;
+    logic [    7:0] syn_weight;
     logic [   31:0] syn_weight_int;
     
     logic [   11:0] LIF_neuron_next_state;
@@ -82,8 +82,8 @@ import obi_pkg::*;
     logic [31:0]    neurarray_wdata,neurarray_rdata; 
     logic           neurarray_valid;
 
-    assign syn_weight_int  = synapse_data_i >> ({2'b0,count_i[2:0]} << 2);
-    assign syn_weight      = syn_weight_int[3:0];
+    assign syn_weight_int  = synapse_data_i >> ({3'b0,count_i[1:0]} << 3);
+    assign syn_weight      = syn_weight_int[7:0];
     
     assign neurarray_cs      = neuroncore_slave_req_i.req ? (neuron_event_i || neuroncore_slave_req_i.req) : (neuron_event_i || req_req);
     assign neurarray_we      = neuroncore_slave_req_i.we ? (neuron_write_i || neuroncore_slave_req_i.we) : (neuron_write_i || req_we);
@@ -111,13 +111,14 @@ import obi_pkg::*;
   
       assign neuroncore_slave_resp_o.gnt = neuroncore_slave_req_i.req;
       assign neuroncore_slave_resp_o.rvalid = neurarray_valid;
-      assign neuron_data_int = {neuron_state_o[31:12], LIF_neuron_next_state};
+      assign neuron_data_int =  {neuron_state_o[31] ? 1'b1 : LIF_neuron_event_out, neuron_state_o[30:12], LIF_neuron_next_state};
 
 
     // Neuron update logic for leaky integrate-and-fire (LIF) model
 
     assign neuron_spike_o = neuron_state_o[31] ? 1'b0 : ((neurarray_cs && neurarray_we) ? LIF_neuron_event_out : 1'b0);
-    lif_neuron lif_neuron_0 ( 
+    lif_neuron_charge lif_neuron_charge_i ( 
+        .param_enable(                           neuron_state_o[31   ]),
         .param_leak_str(                         neuron_state_o[30:24]),
         .param_thr(                              neuron_state_o[23:12]),
         

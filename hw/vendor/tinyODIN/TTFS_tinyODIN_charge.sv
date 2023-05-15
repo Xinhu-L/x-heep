@@ -1,4 +1,4 @@
-module TTFS_tinyODIN #(
+module TTFS_tinyODIN_charge #(
     parameter                   N = 256,
     parameter                   M = 8,
     parameter                   INPUT_RESO = 8,
@@ -47,6 +47,10 @@ logic   [31:0]              neuron_state;
 logic                       neuron_spike;
 logic                       spike_pushback;
 logic   [M-1:0]             spike_pushback_addr;
+logic                       inference_done;
+
+logic                       charge_enable;
+logic   [ 31:0]             synapse_charge;
 
 
 
@@ -83,6 +87,7 @@ tick_generator
     .RSTN,
     .spikecore_done_i(spikecore_done),
     .ODIN_done_i(ODIN_done),
+    .inference_done_i(inference_done),
     .tick_o(tick),
     .next_tick_o(next_tick)
 );
@@ -116,14 +121,14 @@ spike_core
 );
 
 
-controller
+controller_charge
 #(
     .N(N),
     .M(M),
     .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
-) controller_i (
+) controller_charge_i (
     .CLK,
     .RSTN,
     
@@ -150,22 +155,26 @@ controller
     .neuron_event_o(neuron_event),
     .neuron_tref_o(neuron_tref),
 
-    .next_tick_i(next_tick)
+    .next_tick_i(next_tick),
 
+    .charge_enable_o(charge_enable),
+    .charge_count_o(),
+
+    .inference_done_i(inference_done)
 );
 
-neuron_core
+neuron_core_charge
 #(
     .N(N),
     .M(M),
     .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
-) neuron_core_i
+) neuron_core_charge_i
 (
     .CLK,
     .RSTN,
-    .synapse_data_i(synapse_data),
+    .synapse_data_i(synapse_charge),
     .neuron_event_i(neuron_event),
     .neuron_write_i(neuron_write),
     .neuron_tref_i(neuron_tref),
@@ -195,6 +204,7 @@ synaptic_core
     .neuron_event_i(neuron_event),
     .neuron_idx_i(neuron_idx),
     .count_i(count),
+    .charge_enable_i(charge_enable),
 
     .synapse_data_o(synapse_data),
 
@@ -209,7 +219,25 @@ spike_output
     .spike_i(neuron_spike),
     .neuron_idx_i(count),
     .spike_pushback_o(spike_pushback),
-    .spike_pushback_addr_o(spike_pushback_addr)
+    .spike_pushback_addr_o(spike_pushback_addr),
+    .inference_done_o(inference_done)
+);
+
+charger
+#(
+    .N(N),
+    .M(M),
+    .INPUT_RESO(INPUT_RESO)
+) charger_i (
+    .CLK,
+    .RSTN,
+    .count_i(count[7:2]),
+    .synapse_data_i(synapse_data),
+    .charge_count_i(count[4:0]),
+    .charge_ref_count_i(count[7:3]),
+    .chagre_enable_i(charge_enable),
+    .event_tref_i(neuron_tref),
+    .synapse_charge_o(synapse_charge)
 );
 
 

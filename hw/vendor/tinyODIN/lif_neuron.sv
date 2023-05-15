@@ -26,7 +26,7 @@
 //------------------------------------------------------------------------------
 
 
-module lif_neuron ( 
+module lif_neuron_charge ( 
     input  wire [          6:0] param_leak_str,          // leakage strength parameter
     input  wire [         11:0] param_thr,               // neuron firing threshold parameter 
     
