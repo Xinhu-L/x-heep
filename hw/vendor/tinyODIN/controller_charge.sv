@@ -135,29 +135,25 @@ import obi_pkg::*;
 	//----------------------------------------------------------------------------------
 	//	Config register
 	//----------------------------------------------------------------------------------
-    
+    assign control_slave_resp_o.gnt = control_slave_req_i.req;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
             control_slave_resp_o.rdata  <=  'b0;
-            control_slave_resp_o.gnt    <=  'b0;
             control_slave_resp_o.rvalid <=  'b0;
             config_reg                  <=  'b0; 
         end
         else if(control_slave_req_i.req && control_slave_req_i.we) begin
-            control_slave_resp_o.gnt    <=  1'b1;
             control_slave_resp_o.rdata  <=  'b0;
-            control_slave_resp_o.rvalid <=  1'b0;
+            control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
             config_reg                  <=  control_slave_req_i.wdata;
         end
         else if(control_slave_req_i.req && (~control_slave_req_i.we)) begin
-            control_slave_resp_o.gnt    <=  1'b1;
             control_slave_resp_o.rdata  <=  config_reg;
-            control_slave_resp_o.rvalid <=  1'b1;
+            control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
         end
         else begin
             control_slave_resp_o.rdata  <=  'b0;
-            control_slave_resp_o.gnt    <=  'b0;
-            control_slave_resp_o.rvalid <=  'b0; 
+            control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
         end
     end
 

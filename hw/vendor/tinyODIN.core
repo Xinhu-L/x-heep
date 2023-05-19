@@ -4,20 +4,34 @@ CAPI=2:
 # Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 
-name: "tinyODIN"
+name: "pulp-platform.org:ip:tinyODIN"
 
-fileset:
-  rtl:
+filesets:
+  files_rtl:
+  
     files:
-    - ./lif_neuron.v
-    - ./fifo.v
-    - ./controller.v
-    - ./spi_slave.v
-    - ./aer_out.v
-    - ./synaptic_core.v
-    - ./scheduler.v
-    - ./neuron_core.v
-    - ./tiny_ODIN.v
+    - tinyODIN/tinyODIN_OBI_interface.sv
+    - tinyODIN/charger.sv
+    - tinyODIN/controller_charge.sv
+    - tinyODIN/lif_neuron_charge.sv
+    - tinyODIN/spike_FIFO.sv
+    - tinyODIN/spike_filter.sv
+    - tinyODIN/spike_out.sv
+    - tinyODIN/spike_pushback.sv
+    - tinyODIN/tick_generator.sv
+    - tinyODIN/tinyODIN_OBI_interface.sv
+    - tinyODIN/synaptic_core.sv
+    - tinyODIN/TTFS_tinyODIN_charge.sv
+    - tinyODIN/neuron_core_charge.sv
+    - tinyODIN/spike_core.sv
+    - tinyODIN/TTFS_tinyODIN.sv
+    file_type: systemVerilogSource
+
   tinyODIN-sdc:
     files:
     - ./tinyODIN.sdc : {file_type: SDC}
+
+targets:
+  default:
+    filesets:
+    - files_rtl

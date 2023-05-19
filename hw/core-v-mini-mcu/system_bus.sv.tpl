@@ -62,7 +62,10 @@ module system_bus
     input  obi_resp_t flash_mem_slave_resp_i,
 
     output obi_req_t  ext_xbar_slave_req_o,
-    input  obi_resp_t ext_xbar_slave_resp_i
+    input  obi_resp_t ext_xbar_slave_resp_i,
+
+    output obi_req_t  tinyODIN_slave_req_o,
+    input  obi_resp_t tinyODIN_slave_resp_i
 );
 
   import core_v_mini_mcu_pkg::*;
@@ -117,6 +120,7 @@ module system_bus
   assign peripheral_slave_req_o = slave_req[core_v_mini_mcu_pkg::PERIPHERAL_IDX];
   assign flash_mem_slave_req_o = slave_req[core_v_mini_mcu_pkg::FLASH_MEM_IDX];
   assign ext_xbar_slave_req_o = slave_req[core_v_mini_mcu_pkg::EXT_SLAVE_IDX];
+  assign tinyODIN_slave_req_o = slave_req[core_v_mini_mcu_pkg::TINYODIN_IDX];
 
   //slave resp
   assign slave_resp[core_v_mini_mcu_pkg::ERROR_IDX] = error_slave_resp;
@@ -128,6 +132,7 @@ module system_bus
   assign slave_resp[core_v_mini_mcu_pkg::PERIPHERAL_IDX] = peripheral_slave_resp_i;
   assign slave_resp[core_v_mini_mcu_pkg::FLASH_MEM_IDX] = flash_mem_slave_resp_i;
   assign slave_resp[core_v_mini_mcu_pkg::EXT_SLAVE_IDX] = ext_xbar_slave_resp_i;
+  assign slave_resp[core_v_mini_mcu_pkg::TINYODIN_IDX] = tinyODIN_slave_resp_i;
 
 `ifndef SYNTHESIS
   always_ff @(posedge clk_i, negedge rst_ni) begin : check_out_of_bound

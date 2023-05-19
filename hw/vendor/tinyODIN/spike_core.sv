@@ -110,7 +110,14 @@ always_comb begin : MUX_of_spikeSRAM
 end
 // SRAM signal from OBI bus
 assign spikecore_slave_resp_o.gnt = spikecore_slave_req_i.req;
-assign spikecore_slave_resp_o.rvalid = spikecore_slave_resp_o.gnt;
+always_ff @(posedge CLK or negedge RSTN) begin
+    if (!RSTN) begin
+        spikecore_slave_resp_o.rvalid <= 1'b0;
+    end else begin
+        spikecore_slave_resp_o.rvalid <= spikecore_slave_resp_o.gnt;
+    end
+
+end
 
 spike_filter 
 #(

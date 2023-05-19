@@ -80,7 +80,6 @@ import obi_pkg::*;
     logic           neurarray_cs,neurarray_we;
     logic [7:0]     neurarray_addr;
     logic [31:0]    neurarray_wdata,neurarray_rdata; 
-    logic           neurarray_valid;
 
     assign syn_weight_int  = synapse_data_i >> ({3'b0,count_i[1:0]} << 3);
     assign syn_weight      = syn_weight_int[7:0];
@@ -101,16 +100,16 @@ import obi_pkg::*;
     end
 
     // OBI interface
+    assign neuroncore_slave_resp_o.gnt = neuroncore_slave_req_i.req;
     always_ff @(posedge CLK or negedge RSTN) begin
-        if (RSTN) begin
-        neurarray_valid <= '0;
+        if (!RSTN) begin
+            neuroncore_slave_resp_o.rvalid <= 1'b0;
         end else begin
-        neurarray_valid <= neuroncore_slave_resp_o.gnt;
+            neuroncore_slave_resp_o.rvalid <= neuroncore_slave_resp_o.gnt;
         end
       end
   
-      assign neuroncore_slave_resp_o.gnt = neuroncore_slave_req_i.req;
-      assign neuroncore_slave_resp_o.rvalid = neurarray_valid;
+
       assign neuron_data_int =  {neuron_state_o[31] ? 1'b1 : LIF_neuron_event_out, neuron_state_o[30:12], LIF_neuron_next_state};
 
 

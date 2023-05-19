@@ -9,7 +9,9 @@ module TTFS_tinyODIN_charge #(
     input   logic                               RSTN,
 
     input  req_t                    tinyODIN_slave_req_i,
-    output rsp_t                    tinyODIN_slave_resp_o
+    output rsp_t                    tinyODIN_slave_resp_o,
+
+    output  logic                   intr_ODIN_finished_o
 );
 
 // TODO:uniform RSTN
@@ -214,10 +216,12 @@ synaptic_core
 
 spike_output
 #(
-    .M(M)
+    .M(M),
+    .INPUT_RESO(INPUT_RESO)
 ) spike_pushback_i (
     .spike_i(neuron_spike),
-    .neuron_idx_i(count),
+    .count_i(count),
+    .tick_i(tick),
     .spike_pushback_o(spike_pushback),
     .spike_pushback_addr_o(spike_pushback_addr),
     .inference_done_o(inference_done)

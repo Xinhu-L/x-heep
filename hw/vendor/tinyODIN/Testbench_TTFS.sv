@@ -128,7 +128,7 @@ task write_spikecore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b1;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {26'b0,addr};
+    tinyODIN_slave_req_i.addr = {24'b0,addr,2'b0};
     tinyODIN_slave_req_i.wdata = data;
 endtask
 
@@ -140,7 +140,7 @@ task read_spikecore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b0;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {26'b0,addr};
+    tinyODIN_slave_req_i.addr = {24'b0,addr,2'b0};
 endtask
 
 task write_neuroncore(
@@ -152,7 +152,7 @@ task write_neuroncore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b1;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {10'b0,2'b01,12'b0,addr};
+    tinyODIN_slave_req_i.addr = {10'b0,2'b01,10'b0,addr,2'b0};
     tinyODIN_slave_req_i.wdata = data; 
 endtask
 
@@ -164,7 +164,7 @@ task read_neuroncore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b1;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {10'b0,2'b01,12'b0,addr};
+    tinyODIN_slave_req_i.addr = {10'b0,2'b01,10'b0,addr,2'b0};
 endtask
 
 task write_synapsecore(
@@ -176,7 +176,7 @@ task write_synapsecore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b1;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {10'b0,2'b10,7'b0,addr};
+    tinyODIN_slave_req_i.addr = {10'b0,2'b10,5'b0,addr,2'b0};
     tinyODIN_slave_req_i.wdata = data; 
 endtask
 
@@ -188,7 +188,7 @@ task read_synapsecore(
     tinyODIN_slave_req_i.req  = 1'b1;
     tinyODIN_slave_req_i.we   = 1'b1;
     tinyODIN_slave_req_i.be   = 4'b0000;
-    tinyODIN_slave_req_i.addr = {10'b0,2'b10,7'b0,addr};
+    tinyODIN_slave_req_i.addr = {10'b0,2'b10,5'b0,addr,2'b0};
 endtask
 
 task write_control(

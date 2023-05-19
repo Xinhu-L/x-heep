@@ -45,7 +45,7 @@ package core_v_mini_mcu_pkg;
   //must be power of two
   localparam int unsigned MEM_SIZE = 32'h${ram_size_address};
 
-  localparam SYSTEM_XBAR_NSLAVE = ${int(ram_numbanks) + 6};
+  localparam SYSTEM_XBAR_NSLAVE = ${int(ram_numbanks) + 7};
 
   localparam int unsigned LOG_SYSTEM_XBAR_NMASTER = SYSTEM_XBAR_NMASTER > 1 ? $clog2(SYSTEM_XBAR_NMASTER) : 32'd1;
   localparam int unsigned LOG_SYSTEM_XBAR_NSLAVE = SYSTEM_XBAR_NSLAVE > 1 ? $clog2(SYSTEM_XBAR_NSLAVE) : 32'd1;
@@ -100,6 +100,11 @@ package core_v_mini_mcu_pkg;
   localparam logic[31:0] FLASH_MEM_END_ADDRESS = FLASH_MEM_START_ADDRESS + FLASH_MEM_SIZE;
   localparam logic[31:0] FLASH_MEM_IDX = 32'd${int(ram_numbanks) + 5};
 
+  localparam logic[31:0] TINYODIN_START_ADDRESS = 32'h${tinyODIN_start_address};
+  localparam logic[31:0] TINYODIN_SIZE = 32'h${tinyODIN_size_address};
+  localparam logic[31:0] TINYODIN_END_ADDRESS = TINYODIN_START_ADDRESS + TINYODIN_SIZE;
+  localparam logic[31:0] TINYODIN_IDX = 32'd${int(ram_numbanks) + 6};
+
   localparam addr_map_rule_t [SYSTEM_XBAR_NSLAVE-1:0] XBAR_ADDR_RULES = '{
       '{ idx: ERROR_IDX, start_addr: ERROR_START_ADDRESS, end_addr: ERROR_END_ADDRESS },
 % for bank in range(ram_numbanks_cont):
@@ -112,7 +117,8 @@ package core_v_mini_mcu_pkg;
       '{ idx: AO_PERIPHERAL_IDX, start_addr: AO_PERIPHERAL_START_ADDRESS, end_addr: AO_PERIPHERAL_END_ADDRESS },
       '{ idx: PERIPHERAL_IDX, start_addr: PERIPHERAL_START_ADDRESS, end_addr: PERIPHERAL_END_ADDRESS },
       '{ idx: EXT_SLAVE_IDX, start_addr: EXT_SLAVE_START_ADDRESS, end_addr: EXT_SLAVE_END_ADDRESS },
-      '{ idx: FLASH_MEM_IDX, start_addr: FLASH_MEM_START_ADDRESS, end_addr: FLASH_MEM_END_ADDRESS }
+      '{ idx: FLASH_MEM_IDX, start_addr: FLASH_MEM_START_ADDRESS, end_addr: FLASH_MEM_END_ADDRESS },
+      '{ idx: TINYODIN_IDX, start_addr: TINYODIN_START_ADDRESS, end_addr: TINYODIN_END_ADDRESS }
   };
 
 ######################################################################

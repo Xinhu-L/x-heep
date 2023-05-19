@@ -62,7 +62,10 @@ module peripheral_subsystem
     // PDM2PCM Interface
     output logic pdm2pcm_clk_o,
     output logic pdm2pcm_clk_en_o,
-    input  logic pdm2pcm_pdm_i
+    input  logic pdm2pcm_pdm_i,
+
+    // TinyODIN finished
+    input  logic intr_ODIN_finished_i
 );
 
   import core_v_mini_mcu_pkg::*;
@@ -143,6 +146,7 @@ module peripheral_subsystem
   assign intr_vector[${interrupts["intr_ack_stop"]}] = i2c_intr_ack_stop;
   assign intr_vector[${interrupts["intr_host_timeout"]}] = i2c_intr_host_timeout;
   assign intr_vector[${interrupts["spi2_intr_event"]}] = spi2_intr_event;
+  assign intr_vector[${interrupts["intr_ODIN_finished"]}] = intr_ODIN_finished_i;
 
   // External interrupts assignement
   for (genvar i = 0; i < NEXT_INT; i++) begin

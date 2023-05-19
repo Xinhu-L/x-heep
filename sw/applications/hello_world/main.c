@@ -22,14 +22,8 @@
 int main(int argc, char *argv[])
 {
     /* write something to stdout */
-	float mul1;
-	float mul2;
-	float res;
-	mul1 = 1.1f;
-	mul2 = 2.2f;
-	res = mul1 * mul2;
 		
-    printf("hello world! %f \n", res);
+    printf("hello world! \n");
     return EXIT_SUCCESS;
 }
 

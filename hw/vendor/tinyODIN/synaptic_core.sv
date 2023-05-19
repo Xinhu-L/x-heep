@@ -62,18 +62,18 @@ module synaptic_core #(
     assign synarray_addr    = neuron_event_i ? {neuron_idx_i,count_i[7:3]} : charge_enable_i ? {neuron_idx_i,count_i[4:0]} : synapsecore_slave_req_i.req ? synapsecore_slave_req_i.addr : 'b0;
     assign synarray_wdata   = synapsecore_slave_req_i.wdata;
     assign synapse_data_o   = synarray_rdata;
+    
     // OBI interface
-
+    assign synapsecore_slave_resp_o.gnt = synapsecore_slave_req_i.req;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
-        synarray_valid <= '0;
+            synapsecore_slave_resp_o.rvalid <= '0;
         end else begin
-        synarray_valid <= synapsecore_slave_resp_o.gnt;
+            synapsecore_slave_resp_o.rvalid <= synapsecore_slave_resp_o.gnt;
         end
       end
-  
-      assign synapsecore_slave_resp_o.gnt = synapsecore_slave_req_i.req;
-      assign synapsecore_slave_resp_o.rvalid = synarray_valid;
+
+
     
     genvar i;
     // Updated or configured weights to be written to the synaptic memory

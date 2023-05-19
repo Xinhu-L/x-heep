@@ -7,7 +7,7 @@ module peripheral_subsystem
   import reg_pkg::*;
 #(
     //do not touch these parameters
-    parameter NEXT_INT_RND = core_v_mini_mcu_pkg::NEXT_INT == 0 ? 1 : core_v_mini_mcu_pkg::NEXT_INT
+    parameter NEXT_INT_RND         = core_v_mini_mcu_pkg::NEXT_INT == 0 ? 1 : core_v_mini_mcu_pkg::NEXT_INT
 ) (
     input logic clk_i,
     input logic rst_ni,
@@ -20,8 +20,8 @@ module peripheral_subsystem
 
     //PLIC
     input  logic [NEXT_INT_RND-1:0] intr_vector_ext_i,
-    output logic                    irq_plic_o,
-    output logic                    msip_o,
+    output logic                irq_plic_o,
+    output logic                msip_o,
 
     //UART PLIC interrupts
     input logic uart_intr_tx_watermark_i,
@@ -62,7 +62,10 @@ module peripheral_subsystem
     // PDM2PCM Interface
     output logic pdm2pcm_clk_o,
     output logic pdm2pcm_clk_en_o,
-    input  logic pdm2pcm_pdm_i
+    input  logic pdm2pcm_pdm_i,
+
+    // TinyODIN finished
+    input  logic intr_ODIN_finished_i
 );
 
   import core_v_mini_mcu_pkg::*;
@@ -143,6 +146,7 @@ module peripheral_subsystem
   assign intr_vector[47] = i2c_intr_ack_stop;
   assign intr_vector[48] = i2c_intr_host_timeout;
   assign intr_vector[49] = spi2_intr_event;
+  assign intr_vector[50] = intr_ODIN_finished_i;
 
   // External interrupts assignement
   for (genvar i = 0; i < NEXT_INT; i++) begin

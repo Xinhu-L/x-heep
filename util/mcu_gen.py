@@ -502,6 +502,9 @@ def main():
     flash_mem_start_address  = string2int(obj['flash_mem']['address'])
     flash_mem_size_address  = string2int(obj['flash_mem']['length'])
 
+    tinyODIN_start_address  = string2int(obj['tinyODIN']['address'])
+    tinyODIN_size_address  = string2int(obj['tinyODIN']['length'])
+
     linker_onchip_code_start_address  = string2int(obj['linker_script']['onchip_ls']['code']['address'])
     linker_onchip_code_size_address  = string2int(obj['linker_script']['onchip_ls']['code']['lenght'])
 
@@ -811,6 +814,8 @@ def main():
         "ext_slave_size_address"           : ext_slave_size_address,
         "flash_mem_start_address"          : flash_mem_start_address,
         "flash_mem_size_address"           : flash_mem_size_address,
+        "tinyODIN_start_address"           : tinyODIN_start_address,
+        "tinyODIN_size_address"            : tinyODIN_size_address,
         "linker_onchip_code_start_address" : linker_onchip_code_start_address,
         "linker_onchip_code_size_address"  : linker_onchip_code_size_address,
         "linker_onchip_data_start_address" : linker_onchip_data_start_address,

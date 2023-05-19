@@ -289,7 +289,7 @@ module core_v_mini_mcu
     output logic [core_v_mini_mcu_pkg::NUM_BANKS-1:0] memory_subsystem_banks_powergate_switch_o,
     input  logic [core_v_mini_mcu_pkg::NUM_BANKS-1:0] memory_subsystem_banks_powergate_switch_ack_i,
     output logic [EXT_DOMAINS_RND-1:0] external_subsystem_powergate_switch_o,
-    input logic [EXT_DOMAINS_RND-1:0] external_subsystem_powergate_switch_ack_i,
+    input  logic [EXT_DOMAINS_RND-1:0] external_subsystem_powergate_switch_ack_i,
     output logic [EXT_DOMAINS_RND-1:0] external_subsystem_powergate_iso_o,
     output logic [EXT_DOMAINS_RND-1:0] external_subsystem_rst_no,
     output logic [EXT_DOMAINS_RND-1:0] external_ram_banks_set_retentive_o,
@@ -403,6 +403,10 @@ module core_v_mini_mcu
   logic uart_intr_rx_timeout;
   logic uart_intr_rx_parity_err;
 
+  // tinyODIN
+  obi_req_t   tinyODIN_slave_req;
+  obi_resp_t  tinyODIN_slave_resp;
+  logic intr_ODIN_finished;
   assign intr = {
     1'b0, irq_fast, 4'b0, irq_external, 3'b0, rv_timer_intr[0], 3'b0, irq_software, 3'b0
   };
@@ -493,7 +497,23 @@ module core_v_mini_mcu
       .flash_mem_slave_req_o(flash_mem_slave_req),
       .flash_mem_slave_resp_i(flash_mem_slave_resp),
       .ext_xbar_slave_req_o(ext_xbar_slave_req_o),
-      .ext_xbar_slave_resp_i(ext_xbar_slave_resp_i)
+      .ext_xbar_slave_resp_i(ext_xbar_slave_resp_i),
+      .tinyODIN_slave_req_o(tinyODIN_slave_req),
+      .tinyODIN_slave_resp_i(tinyODIN_slave_resp)
+  );
+
+  TTFS_tinyODIN_charge #(
+      .N(256),
+      .M(8),
+      .INPUT_RESO(8),
+      .req_t(obi_req_t),
+      .rsp_t(obi_resp_t)
+  ) TTFS_tinyODIN_charge_i (
+      .CLK(clk_i),
+      .RSTN(rst_ni),
+      .tinyODIN_slave_req_i(tinyODIN_slave_req),
+      .tinyODIN_slave_resp_o(tinyODIN_slave_resp),
+      .intr_ODIN_finished_o(intr_ODIN_finished)
   );
 
   memory_subsystem #(
@@ -622,7 +642,8 @@ module core_v_mini_mcu
       .rv_timer_3_intr_o(rv_timer_intr[3]),
       .pdm2pcm_clk_o(pdm2pcm_clk_o),
       .pdm2pcm_clk_en_o(pdm2pcm_clk_oe_o),
-      .pdm2pcm_pdm_i(pdm2pcm_pdm_i)
+      .pdm2pcm_pdm_i(pdm2pcm_pdm_i),
+      .intr_ODIN_finished_i(intr_ODIN_finished)
   );
 
   assign pdm2pcm_pdm_o = 0;

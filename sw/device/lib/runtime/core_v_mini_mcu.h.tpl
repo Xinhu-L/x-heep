@@ -47,6 +47,10 @@ extern "C" {
 #define FLASH_MEM_SIZE 0x${flash_mem_size_address}
 #define FLASH_MEM_END_ADDRESS (FLASH_MEM_START_ADDRESS + FLASH_MEM_SIZE)
 
+#define TINYODIN_START_ADDRESS 0x${tinyODIN_start_address}
+#define TINYODIN_SIZE 0x${tinyODIN_size_address}
+#define TINYODIN_END_ADDRESS (TINYODIN_START_ADDRESS + TINYODIN_SIZE)
+
 % for key, value in interrupts.items():
 #define ${key.upper()} ${value}
 % endfor
