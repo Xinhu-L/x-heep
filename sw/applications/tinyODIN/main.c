@@ -39,19 +39,34 @@ int main(int argc, char *argv[])
 
     int write_addr;
     uint32_t write_data;
-    write_addr = 0x00000002*4;
-    write_data = 0xBEB4A69D;
+    // Initialize the spike core
+    write_addr = 0x00000001;
+    write_data = 0x00000001;
     tinyODIN_spike_core_write(&tinyODIN,write_addr,write_data);
+    write_addr = 0x00000006;
+    write_data = 0xBAB49E00;
+    tinyODIN_spike_core_write(&tinyODIN,write_addr,write_data);
+    write_addr = 0x00000022;
+    write_data = 0x00ACE9CF;
+    tinyODIN_spike_core_write(&tinyODIN,write_addr,write_data);
+
+    // Initialize the neuron core
     for(ptrdiff_t i=0x00000000; i<0x00000100; i++){
-        write_addr = i*4;
+        write_addr = i;
         write_data = 0x0015e000;
         tinyODIN_neuron_core_write(&tinyODIN,write_addr,write_data);
     }
-    write_addr = 0x00000003 * 4;
+
+    // Initialize the synaptic core
+    write_addr = 0x00000012;
     write_data = 0x1ceeef40;
     tinyODIN_synaptic_core_write(&tinyODIN,write_addr,write_data);
+    write_addr = 0x0000121E;
+    write_data = 0x1d000000;
+    tinyODIN_synaptic_core_write(&tinyODIN,write_addr,write_data);
+    // Begin Inference
     write_addr = 0x00000000;
-    write_data = 0xff000400;
+    write_data = 0xff640400;
     tinyODIN_control_write(&tinyODIN,write_addr,write_data);
 
 

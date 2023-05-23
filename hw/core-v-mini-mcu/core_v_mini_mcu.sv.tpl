@@ -276,7 +276,7 @@ module core_v_mini_mcu
       .RSTN(rst_ni),
       .tinyODIN_slave_req_i(tinyODIN_slave_req),
       .tinyODIN_slave_resp_o(tinyODIN_slave_resp),
-      .tinyintr_ODIN_finished_o(intr_ODIN_finished)
+      .intr_ODIN_finished_o(intr_ODIN_finished)
   );
 
   memory_subsystem #(

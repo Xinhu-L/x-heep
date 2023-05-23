@@ -48,3 +48,7 @@ sw/device/lib/drivers/**/*_structs.h
 
 # openroad
 flow/OpenROAD-flow-scripts
+
+_info
+_lib*
+_vmake

@@ -12,488 +12,245 @@
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
+vsim -voptargs=+acc work.TTFS_tinyODIN_tb
+# vsim -voptargs="+acc" work.TTFS_tinyODIN_tb 
+# Start time: 15:48:39 on May 19,2023
+# ** Note: (vsim-8009) Loading existing optimized design _opt2
+# Loading sv_std.std
+# Loading work.obi_pkg(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
+# Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
+quit -sim
+# End time: 15:49:12 on May 19,2023, Elapsed time: 0:00:33
+# Errors: 0, Warnings: 0
 # Loading project work
-# Compile of spike_filter.sv was successful.
-# Compile of spike_FIFO.sv was successful.
-# Compile of spike_out.sv was successful.
+# Compile of charger.sv was successful.
+# Compile of controller_charge.sv was successful.
+# Compile of lif_neuron_charge.sv was successful.
+# Compile of neuron_core_charge.sv was successful.
+# Compile of obi_pkg.sv was successful.
 # Compile of spike_core.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 5 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 14:52:18 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Error (suppressible): /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_filter.sv(107): (vopt-7063) Failed to find 'pass' in hierarchical name 'pass'.
-#         Region: spike_core_tb.spike_filter_tb
-# Optimization failed
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=0.
-# Error loading design
-# End time: 14:52:19 on Apr 25,2023, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 2
-# Compile of spike_filter.sv was successful.
 # Compile of spike_FIFO.sv was successful.
+# Compile of spike_filter.sv was successful.
 # Compile of spike_out.sv was successful.
+# Compile of spike_pushback.sv was successful.
+# Compile of synaptic_core.sv was successful.
+# Compile of tbench.sv was successful.
+# Compile of Testbench_TTFS.sv was successful.
+# Compile of tick_generator.sv was successful.
+# Compile of tinyODIN_OBI_interface.sv was successful.
+# Compile of TTFS_tinyODIN_charge.sv was successful.
+# 16 compiles, 0 failed with no errors.
+# Compile of charger.sv was successful.
+# Compile of controller_charge.sv was successful.
+# Compile of lif_neuron_charge.sv was successful.
+# Compile of neuron_core_charge.sv was successful.
+# Compile of obi_pkg.sv was successful.
 # Compile of spike_core.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 5 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 14:52:55 on Apr 25,2023
+# Compile of spike_FIFO.sv was successful.
+# Compile of spike_filter.sv was successful.
+# Compile of spike_out.sv was successful.
+# Compile of spike_pushback.sv was successful.
+# Compile of synaptic_core.sv was successful.
+# Compile of tbench.sv was successful.
+# Compile of Testbench_TTFS.sv was successful.
+# Compile of tick_generator.sv was successful.
+# Compile of tinyODIN_OBI_interface.sv was successful.
+# Compile of TTFS_tinyODIN_charge.sv was successful.
+# 16 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.TTFS_tinyODIN_tb
+# vsim -voptargs="+acc" work.TTFS_tinyODIN_tb 
+# Start time: 15:52:54 on May 19,2023
 # ** Note: (vsim-3812) Design is being optimized...
-# ** Error (suppressible): /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87): (vopt-2912) Port 'FiFO_w_en_o' not found in module 'spike_filter' (8th connection).
-# Optimization failed
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=0.
-# Error loading design
-# End time: 14:52:56 on Apr 25,2023, Elapsed time: 0:00:01
-# Errors: 1, Warnings: 2
-# Compile of spike_core_tb.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 14:53:25 on Apr 25,2023
-# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-143) Recognized 1 FSM in module "controller_charge(fast)".
+# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/Testbench_TTFS.sv(106): (vopt-2685) [TFMPC] - Too few port connections for 'TTFS_tinyODIN_charge'.  Expected 5, found 4.
+# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/Testbench_TTFS.sv(106): (vopt-2718) [TFMPC] - Missing connection for port 'intr_ODIN_finished_o'.
 # ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (32) for port 'filter_spike_i'. The port definition is at: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_filter.sv(18).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb/spike_filter_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 87
-# ** Warning: (vsim-3015) [PCDPC] - Port size (8) does not match connection size (6) for port 'filter_addr_o'. The port definition is at: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_filter.sv(19).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb/spike_filter_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 87
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 71
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 67
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 63
-# Error loading design
-# End time: 14:53:27 on Apr 25,2023, Elapsed time: 0:00:02
-# Errors: 3, Warnings: 4
-# Compile of spike_core_tb.sv was successful.
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 14:57:10 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 71
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 67
-# ** Error (suppressible): (vsim-3839) Variable '/spike_core_tb/ADDR', driven via a port connection, is multiply driven. See /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(87).
-#    Time: 0 ps  Iteration: 0  Instance: /spike_core_tb File: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv Line: 63
-# Error loading design
-# End time: 14:57:12 on Apr 25,2023, Elapsed time: 0:00:02
-# Errors: 3, Warnings: 3
-# Compile of spike_core_tb.sv failed with 3 errors.
-# Compile of spike_core_tb.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:07:52 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/CLK \
-sim:/spike_core_tb/sram_spike_tb/EN \
-sim:/spike_core_tb/sram_spike_tb/WE \
-sim:/spike_core_tb/sram_spike_tb/ADDR \
-sim:/spike_core_tb/sram_spike_tb/WDATA \
-sim:/spike_core_tb/sram_spike_tb/RDATA \
-sim:/spike_core_tb/sram_spike_tb/spike
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/start_i
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Simulation stop requested.
-# Compile of spike_core_tb.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 15:13:58 on Apr 25,2023, Elapsed time: 0:06:06
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:13:58 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/CLK \
-sim:/spike_core_tb/sram_spike_tb/EN \
-sim:/spike_core_tb/sram_spike_tb/WE \
-sim:/spike_core_tb/sram_spike_tb/ADDR \
-sim:/spike_core_tb/sram_spike_tb/WDATA \
-sim:/spike_core_tb/sram_spike_tb/RDATA
-add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/CLK \
-sim:/spike_core_tb/sram_spike_tb/EN \
-sim:/spike_core_tb/sram_spike_tb/WE \
-sim:/spike_core_tb/sram_spike_tb/ADDR \
-sim:/spike_core_tb/sram_spike_tb/WDATA \
-sim:/spike_core_tb/sram_spike_tb/RDATA \
-sim:/spike_core_tb/sram_spike_tb/spike
-add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/spike
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Break in Module spike_core_tb at /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv line 20
-# Compile of spike_filter.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 2 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 15:30:58 on Apr 25,2023, Elapsed time: 0:17:00
-# Errors: 0, Warnings: 2
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:30:58 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/CLK \
-sim:/spike_core_tb/sram_spike_tb/EN \
-sim:/spike_core_tb/sram_spike_tb/WE \
-sim:/spike_core_tb/sram_spike_tb/ADDR \
-sim:/spike_core_tb/sram_spike_tb/WDATA \
-sim:/spike_core_tb/sram_spike_tb/RDATA \
-sim:/spike_core_tb/sram_spike_tb/spike
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Simulation stop requested.
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 15:37:05 on Apr 25,2023, Elapsed time: 0:06:07
-# Errors: 0, Warnings: 2
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:37:05 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Simulation stop requested.
-# Compile of spike_filter.sv was successful.
-# Compile of spike_filter.sv was successful.
-# Compile of spike_FIFO.sv was successful.
-# Compile of spike_out.sv was successful.
-# Compile of spike_core.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 5 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 15:46:36 on Apr 25,2023, Elapsed time: 0:09:31
-# Errors: 0, Warnings: 3
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:46:36 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # Loading sv_std.std
 # Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
 # Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
 add wave -position insertpoint  \
-sim:/spike_core_tb/sram_spike_tb/CLK \
-sim:/spike_core_tb/sram_spike_tb/EN \
-sim:/spike_core_tb/sram_spike_tb/WE \
-sim:/spike_core_tb/sram_spike_tb/ADDR \
-sim:/spike_core_tb/sram_spike_tb/WDATA \
-sim:/spike_core_tb/sram_spike_tb/RDATA \
-sim:/spike_core_tb/sram_spike_tb/spike
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_empty_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_full_i \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Break in Module spike_filter at /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_filter.sv line 86
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 15:55:04 on Apr 25,2023, Elapsed time: 0:08:28
+sim:/TTFS_tinyODIN_tb/weight_l1 \
+sim:/TTFS_tinyODIN_tb/weight_l2 \
+sim:/TTFS_tinyODIN_tb/input_spike
+run
+run
+run
+run
+run
+run
+run
+run
+add wave -position insertpoint sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/controller_charge_i/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# Loading work.obi_pkg(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
+# Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
+run
+run
+run
+add wave -position insertpoint sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/controller_charge_i/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# Loading work.obi_pkg(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
+# Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
+run
+run
+run
+# Compile of controller_charge.sv was successful.
+vsim -voptargs=+acc work.TTFS_tinyODIN_tb
+# End time: 16:00:26 on May 19,2023, Elapsed time: 0:07:32
 # Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 15:55:04 on Apr 25,2023
+# vsim -voptargs="+acc" work.TTFS_tinyODIN_tb 
+# Start time: 16:00:26 on May 19,2023
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
+# ** Note: (vopt-143) Recognized 1 FSM in module "controller_charge(fast)".
+# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/Testbench_TTFS.sv(106): (vopt-2685) [TFMPC] - Too few port connections for 'TTFS_tinyODIN_charge'.  Expected 5, found 4.
+# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/Testbench_TTFS.sv(106): (vopt-2718) [TFMPC] - Missing connection for port 'intr_ODIN_finished_o'.
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
 # Loading sv_std.std
 # Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
 # Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
+add wave -position insertpoint sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/controller_charge_i/*
+run
+run
+run
 add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Break in Module sram_spike at /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core.sv line 188
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 16:06:36 on Apr 25,2023, Elapsed time: 0:11:32
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 16:06:36 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
+sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/spike_core_i/sram_spike_i/spike
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-8009) Loading existing optimized design _opt
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
-# Loading sv_std.std
 # Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
 # Loading work.spike_filter(fast)
+# Loading work.spike_FIFO(fast)
+# Loading work.sram_spike(fast)
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
+run
+run
+run
 add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Simulation stop requested.
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 16:15:25 on Apr 25,2023, Elapsed time: 0:08:49
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 16:15:25 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
+sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/charger_i/charge
+add wave -position insertpoint sim:/TTFS_tinyODIN_tb/TTFS_tinyODIN_charge/charger_i/*
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-8009) Loading existing optimized design _opt
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
-# Loading sv_std.std
 # Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
+# Loading work.Testbench_TTFS_sv_unit(fast)
+# Loading work.TTFS_tinyODIN_tb(fast)
+# Loading work.TTFS_tinyODIN_charge(fast)
+# Loading work.tinyODIN_OBI_interface(fast)
+# Loading work.tick_generator(fast)
+# Loading work.spike_core(fast)
 # Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run -all
-# Break key hit
-# Break in Module spike_filter at /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_filter.sv line 51
-# Compile of spike_filter.sv was successful.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 16:18:05 on Apr 25,2023, Elapsed time: 0:02:40
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 16:18:05 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
+# Loading work.spike_FIFO(fast)
 # Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
+# Loading work.controller_charge(fast)
+# Loading work.neuron_core_charge(fast)
+# Loading work.lif_neuron_charge(fast)
+# Loading work.SRAM_256x32_wrapper(fast)
+# Loading work.synaptic_core(fast)
+# Loading work.SRAM_8192x32_wrapper(fast)
+# Loading work.spike_output(fast)
+# Loading work.charger(fast)
 run
 run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-# Compile of spike_filter.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 2 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 16:31:30 on Apr 25,2023, Elapsed time: 0:13:25
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 16:31:30 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2685) [TFMPC] - Too few port connections for 'spike_filter_tb'.  Expected 11, found 10.
-# ** Warning: /users/xinhuliu/Desktop/x-heep/hw/vendor/tinyODIN/spike_core_tb.sv(94): (vopt-2718) [TFMPC] - Missing connection for port 'FIFO_w_data_o'.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/tick_i \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
-run
-run
-run
-# Compile of spike_filter.sv was successful.
-# Compile of spike_core_tb.sv was successful.
-# 2 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.spike_core_tb
-# End time: 16:35:03 on Apr 25,2023, Elapsed time: 0:03:33
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.spike_core_tb 
-# Start time: 16:35:03 on Apr 25,2023
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vopt-143) Recognized 1 FSM in module "spike_filter(fast)".
-# Loading sv_std.std
-# Loading work.obi_pkg(fast)
-# Loading work.spike_core_tb_sv_unit(fast)
-# Loading work.spike_core_tb(fast)
-# Loading work.sram_spike(fast)
-# Loading work.spike_filter(fast)
-add wave -position insertpoint  \
-sim:/spike_core_tb/spike_filter_tb/CLK \
-sim:/spike_core_tb/spike_filter_tb/RSTN \
-sim:/spike_core_tb/spike_filter_tb/start_i \
-sim:/spike_core_tb/spike_filter_tb/filter_spike_i \
-sim:/spike_core_tb/spike_filter_tb/filter_addr_o \
-sim:/spike_core_tb/spike_filter_tb/filter_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_en_o \
-sim:/spike_core_tb/spike_filter_tb/FIFO_w_data_o \
-sim:/spike_core_tb/spike_filter_tb/fetch_counter \
-sim:/spike_core_tb/spike_filter_tb/state \
-sim:/spike_core_tb/spike_filter_tb/next_state
 run

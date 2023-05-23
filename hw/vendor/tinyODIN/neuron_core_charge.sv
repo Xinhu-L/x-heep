@@ -46,10 +46,9 @@ import obi_pkg::*;
     input   logic [         31:0]       synapse_data_i,
     
     // Inputs from controller ---------------------------------
-    input   logic                       neuron_event_i,
-    input   logic                       neuron_write_i,
+    input   logic                       neuron_event_write_i,
+    input   logic                       neuron_event_read_i,
     input   logic                       neuron_tref_i,
-    input   logic [   M-1:0]            neuron_idx_i,
     input   logic [   M-1:0]            count_i,
     
     // Outputs ------------------------------------------------
@@ -77,18 +76,21 @@ import obi_pkg::*;
     logic           LIF_neuron_event_out;
 
     // Neuron memory wrapper
-    logic           neurarray_cs,neurarray_we;
-    logic [7:0]     neurarray_addr;
+    logic           neurarray_en_w,neurarray_en_r;
+    logic           neurarray_we;
+    logic [7:0]     neurarray_addr_w,neurarray_addr_r;
     logic [31:0]    neurarray_wdata,neurarray_rdata; 
 
     assign syn_weight_int  = synapse_data_i >> ({3'b0,count_i[1:0]} << 3);
     assign syn_weight      = syn_weight_int[7:0];
     
-    assign neurarray_cs      = neuroncore_slave_req_i.req ? (neuron_event_i || neuroncore_slave_req_i.req) : (neuron_event_i || req_req);
-    assign neurarray_we      = neuroncore_slave_req_i.we ? (neuron_write_i || neuroncore_slave_req_i.we) : (neuron_write_i || req_we);
-    assign neurarray_addr    = neuron_event_i ? count_i : neuroncore_slave_req_i.req ? neuroncore_slave_req_i.addr[7:0] : 'b0;
-    assign neuron_state_o   = neurarray_rdata;
-    assign neurarray_wdata = neuroncore_slave_req_i.req ? neuroncore_slave_req_i.wdata : neuron_data_int;
+    assign neurarray_en_w    = neuroncore_slave_req_i.req ? (neuron_event_write_i || neuroncore_slave_req_i.req) : (neuron_event_write_i || req_req);
+    assign neurarray_en_r    = neuroncore_slave_req_i.req ? (neuron_event_read_i || neuroncore_slave_req_i.req) : (neuron_event_read_i || req_req);
+    assign neurarray_we      = neuroncore_slave_req_i.we ? (neuron_event_write_i || neuroncore_slave_req_i.we) : (neuron_event_write_i || req_we);
+    assign neurarray_addr_w  = neuron_event_write_i ? count_i : neuroncore_slave_req_i.req ? neuroncore_slave_req_i.addr[7:0] : 'b0;
+    assign neurarray_addr_r  = neuron_event_read_i ? count_i+1'b1 : neuroncore_slave_req_i.req ? neuroncore_slave_req_i.addr[7:0] : 'b0;
+    assign neuron_state_o    = neurarray_rdata;
+    assign neurarray_wdata   = neuroncore_slave_req_i.req ? neuroncore_slave_req_i.wdata : neuron_data_int;
 
     //
     always_ff @( posedge CLK or negedge RSTN ) begin 
@@ -115,7 +117,7 @@ import obi_pkg::*;
 
     // Neuron update logic for leaky integrate-and-fire (LIF) model
 
-    assign neuron_spike_o = neuron_state_o[31] ? 1'b0 : ((neurarray_cs && neurarray_we) ? LIF_neuron_event_out : 1'b0);
+    assign neuron_spike_o = neuron_state_o[31] ? 1'b0 : ((neurarray_en_w && neurarray_we) ? LIF_neuron_event_out : 1'b0);
     lif_neuron_charge lif_neuron_charge_i ( 
         .param_enable(                           neuron_state_o[31   ]),
         .param_leak_str(                         neuron_state_o[30:24]),
@@ -125,7 +127,7 @@ import obi_pkg::*;
         .state_core_next(                 LIF_neuron_next_state[11: 0]),
         
         .syn_weight(syn_weight),
-        .syn_event(neuron_event_i),
+        .syn_event(neuron_event_write_i),
         .time_ref(neuron_tref_i),
         
         .spike_out(LIF_neuron_event_out) 
@@ -140,14 +142,17 @@ import obi_pkg::*;
         .CK         (CLK),
     
         // Control and data inputs
-        .CS         (neurarray_cs),
+        .EN_W       (neurarray_en_w),
+        .EN_R       (neurarray_en_r),
         .WE         (neurarray_we),
-        .A          (neurarray_addr),
+        .A_W        (neurarray_addr_w),
+        .A_R        (neurarray_addr_r),
         .D          (neurarray_wdata),
         
         // Data output
         .Q          (neurarray_rdata)
     );
+    
     
 
 endmodule
@@ -161,9 +166,11 @@ module SRAM_256x32_wrapper (
     input          CK,                       // Clock (synchronous read/write)
 
     // Control and data inputs
-    input          CS,                       // Chip select
+    input          EN_W,                       
+    input          EN_R,
     input          WE,                       // Write enable
-    input  [  7:0] A,                        // Address bus 
+    input  [  7:0] A_W,                        // Address bus
+    input  [  7:0] A_R, 
     input  [ 31:0] D,                        // Data input bus (write)
 
     // Data output
@@ -178,10 +185,15 @@ module SRAM_256x32_wrapper (
         reg [31:0] SRAM[255:0];
         reg [31:0] Qr;
         always @(posedge CK) begin
-            Qr <= CS ? SRAM[A] : Qr;
-            if (CS & WE) SRAM[A] <= D;
+            if (EN_W & WE) SRAM[A_W] <= D;
+        end
+
+        always @(posedge CK) begin
+            if (EN_R) Qr <= SRAM[A_R];
+            else Qr <= 8'hz;
         end
         assign Q = Qr;
+
 
 
 endmodule

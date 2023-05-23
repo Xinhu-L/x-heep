@@ -46,7 +46,7 @@ initial begin
     $readmemh("input_spike.txt",input_spike);
     for (int i=0; i<36; ++i) begin
         write_spikecore(
-            .addr(i+25),
+            .addr(i),
             .data(input_spike[i]),
             .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
             #10 tinyODIN_slave_req.req = 1'b0;
@@ -66,7 +66,7 @@ initial begin
         for (int j=0; j<32; ++j) begin
             if (j<13) begin
                 write_synapsecore(
-                    .addr(i*32 + j +3200),
+                    .addr(i*32 + j + 18),
                     .data(weight_l1[i*13 + j]),
                     .tinyODIN_slave_req_i(tinyODIN_slave_req));
                     #10 tinyODIN_slave_req.req = 1'b0;
@@ -80,7 +80,7 @@ initial begin
         for (int j=0; j<32; ++j) begin
             if (j<2) begin
                 write_synapsecore(
-                    .addr(i*32 + j +30),
+                    .addr(i*32 + j +4638),
                     .data(weight_l2[i*2 + j]),
                     .tinyODIN_slave_req_i(tinyODIN_slave_req));
                     #10 tinyODIN_slave_req.req = 1'b0;
@@ -90,7 +90,7 @@ initial begin
     end
     write_control(
         .addr(32'h0),
-        .data(32'hff00_0400),
+        .data(32'hff64_0400),
         .tinyODIN_slave_req_i(tinyODIN_slave_req));
         #10 tinyODIN_slave_req.req = 1'b0;
         #10 tinyODIN_slave_req.we  = 1'b0; 

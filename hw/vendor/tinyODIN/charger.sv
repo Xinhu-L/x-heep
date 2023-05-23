@@ -9,7 +9,6 @@ module charger #(
     input   logic   [5:0]           count_i,
     input   logic   [31:0]          synapse_data_i,
     input   logic   [4:0]           charge_count_i,
-    input   logic   [4:0]           charge_ref_count_i,
     input   logic                   chagre_enable_i,
     input   logic                   event_tref_i,
 
