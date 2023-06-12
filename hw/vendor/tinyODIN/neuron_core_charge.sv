@@ -31,36 +31,31 @@ module neuron_core_charge
 import obi_pkg::*;
 #(
     parameter N = 256,
-    parameter M = 8,
-    parameter INPUT_RESO = 8,
     parameter type              req_t = logic, // OBI request type
     parameter type              rsp_t = logic  // OBI response type
 
 )(
     
     // Global inputs ------------------------------------------
-    input   logic                       CLK,
-    input   logic                       RSTN,
+    input   logic                           CLK,
+    input   logic                           RSTN,
     
     // Synaptic inputs ----------------------------------------
-    input   logic [         31:0]       synapse_data_i,
+    input   logic [         31:0]           synapse_data_i,
     
     // Inputs from controller ---------------------------------
-    input   logic                       neuron_event_write_i,
-    input   logic                       neuron_event_read_i,
-    input   logic                       neuron_tref_i,
-    input   logic [   M-1:0]            count_i,
+    input   logic                           neuron_event_write_i,
+    input   logic                           neuron_event_read_i,
+    input   logic                           neuron_tref_i,
+    input   logic [   $clog2(N)-1:0]        count_i,
     
     // Outputs ------------------------------------------------
-    output  logic [         31:0]       neuron_state_o,
-    output  logic                       neuron_spike_o,
+    output  logic [         31:0]           neuron_state_o,
+    output  logic                           neuron_spike_o,
 
     // Input from the OBI bus
-    input   req_t                       neuroncore_slave_req_i,
-    output  rsp_t                       neuroncore_slave_resp_o,
-
-    // Tick  --------------------------------------------------
-    input   logic [  INPUT_RESO-1:0]    tick_o
+    input   req_t                           neuroncore_slave_req_i,
+    output  rsp_t                           neuroncore_slave_resp_o
 );
     
     // Chip select
@@ -76,10 +71,10 @@ import obi_pkg::*;
     logic           LIF_neuron_event_out;
 
     // Neuron memory wrapper
-    logic           neurarray_en_w,neurarray_en_r;
-    logic           neurarray_we;
-    logic [7:0]     neurarray_addr_w,neurarray_addr_r;
-    logic [31:0]    neurarray_wdata,neurarray_rdata; 
+    logic                       neurarray_en_w,neurarray_en_r;
+    logic                       neurarray_we;
+    logic [$clog2(N)-1:0]       neurarray_addr_w,neurarray_addr_r;
+    logic [31:0]                neurarray_wdata,neurarray_rdata; 
 
     assign syn_weight_int  = synapse_data_i >> ({3'b0,count_i[1:0]} << 3);
     assign syn_weight      = syn_weight_int[7:0];
@@ -136,7 +131,9 @@ import obi_pkg::*;
 
     // Neuron output spike events
 
-    SRAM_256x32_wrapper neurarray_0 (       
+    SRAM_256x32_wrapper#(
+        .N(N)
+    ) neurarray_0 (       
         
         // Global inputs
         .CK         (CLK),
@@ -160,21 +157,23 @@ endmodule
 
 
 
-module SRAM_256x32_wrapper (
+module SRAM_256x32_wrapper#(
+    parameter                   N = 256
+)  (
 
     // Global inputs
-    input          CK,                       // Clock (synchronous read/write)
+    input                       CK,                       // Clock (synchronous read/write)
 
     // Control and data inputs
-    input          EN_W,                       
-    input          EN_R,
-    input          WE,                       // Write enable
-    input  [  7:0] A_W,                        // Address bus
-    input  [  7:0] A_R, 
-    input  [ 31:0] D,                        // Data input bus (write)
+    input                       EN_W,                       
+    input                       EN_R,
+    input                       WE,                       // Write enable
+    input  [$clog2(N)-1:0]      A_W,                        // Address bus
+    input  [$clog2(N)-1:0]      A_R, 
+    input  [31:0]               D,                        // Data input bus (write)
 
     // Data output
-    output [ 31:0] Q                         // Data output bus (read)   
+    output [ 31:0]              Q                         // Data output bus (read)   
 );
 
 
@@ -182,7 +181,7 @@ module SRAM_256x32_wrapper (
      *  Simple behavioral code for simulation, to be replaced by a 256-word 32-bit SRAM macro 
      *  or Block RAM (BRAM) memory with the same format for FPGA implementations.
      */      
-        reg [31:0] SRAM[255:0];
+        reg [31:0] SRAM[N-1:0];
         reg [31:0] Qr;
         always @(posedge CK) begin
             if (EN_W & WE) SRAM[A_W] <= D;
@@ -190,7 +189,7 @@ module SRAM_256x32_wrapper (
 
         always @(posedge CK) begin
             if (EN_R) Qr <= SRAM[A_R];
-            else Qr <= 8'hz;
+            else Qr <= 'z;
         end
         assign Q = Qr;
 
