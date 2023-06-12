@@ -28,34 +28,33 @@
 
 module synaptic_core #(
     parameter N = 256,
-    parameter M = 8,
     parameter type              req_t = logic, // OBI request type
     parameter type              rsp_t = logic  // OBI response type
 )(
     
     // Global inputs ------------------------------------------
-    input   logic                   CLK,
-    input   logic                   RSTN,
+    input   logic                           CLK,
+    input   logic                           RSTN,
     
     // Inputs from controller ---------------------------------
-    input   logic                   neuron_event_i,
-    input   logic [   M-1:0]        neuron_idx_i,
-    input   logic [   M-1:0]        count_i,
-    input   logic                   charge_enable_i,
+    input   logic                           neuron_event_i,
+    input   logic   [$clog2(N)-1:0]         neuron_idx_i,
+    input   logic   [$clog2(N)-1:0]         count_i,
+    input   logic                           charge_enable_i,
     
     // Outputs ------------------------------------------------
-    output  logic [   31:0]         synapse_data_o,
+    output  logic   [31:0]               synapse_data_o,
     
     // Form OBI BUS -------------------------------------------
-    input   req_t                    synapsecore_slave_req_i,
-    output  rsp_t                    synapsecore_slave_resp_o
+    input   req_t                           synapsecore_slave_req_i,
+    output  rsp_t                           synapsecore_slave_resp_o
 );
 
     // SRAM control signal defined here
-    logic           synarray_cs,synarray_we;
-    logic [12:0]    synarray_addr;
-    logic [31:0]    synarray_wdata,synarray_rdata; 
-    logic           synarray_valid;
+    logic                           synarray_cs,synarray_we;
+    logic   [$clog2((N*N)/8)-1:0]   synarray_addr;
+    logic   [31:0]                  synarray_wdata,synarray_rdata; 
+    logic                           synarray_valid;
        
     assign synarray_cs      = neuron_event_i || charge_enable_i || synapsecore_slave_req_i.req;
     assign synarray_we      = synapsecore_slave_req_i.we;
@@ -73,23 +72,11 @@ module synaptic_core #(
         end
       end
 
-
-    
-    genvar i;
-    // Updated or configured weights to be written to the synaptic memory
-
-    // generate
-    //     for (i=0; i<4; i=i+1) begin
-    //         assign synarray_wdata[(i<<3)+7:(i<<3)] = (i == CTRL_SPI_ADDR[14:13])
-    //                                                ? ((CTRL_PROG_DATA[M-1:0] & ~CTRL_PROG_DATA[2*M-1:M]) | (SYNARRAY_RDATA[(i<<3)+7:(i<<3)] & CTRL_PROG_DATA[2*M-1:M]))
-    //                                                : SYNARRAY_RDATA[(i<<3)+7:(i<<3)];
-    //     end
-    // endgenerate
-    
-    
     // Synaptic memory wrapper
 
-    SRAM_8192x32_wrapper synarray_0 (
+    SRAM_8192x32_wrapper#(
+        .N(N)
+    ) synarray_0 (
         
         // Global inputs
         .CK         (~CLK),
@@ -110,19 +97,21 @@ endmodule
 
 
 
-module SRAM_8192x32_wrapper (
+module SRAM_8192x32_wrapper#(
+    parameter                   N = 256
+) (
 
     // Global inputs
-    input         CK,                       // Clock (synchronous read/write)
+    input                           CK,                       // Clock (synchronous read/write)
 
     // Control and data inputs
-    input         CS,                       // Chip select
-    input         WE,                       // Write enable
-    input  [12:0] A,                        // Address bus 
-    input  [31:0] D,                        // Data input bus (write)
+    input                           CS,                       // Chip select
+    input                           WE,                       // Write enable
+    input   [$clog2((N*N)/8)-1:0]   A,                        // Address bus 
+    input   [31:0]                  D,                        // Data input bus (write)
 
     // Data output
-    output [31:0] Q                         // Data output bus (read)   
+    output  [31:0]                  Q                         // Data output bus (read)   
 );
 
 
@@ -130,7 +119,7 @@ module SRAM_8192x32_wrapper (
      *  Simple behavioral code for simulation, to be replaced by a 8192-word 32-bit SRAM macro 
      *  or Block RAM (BRAM) memory with the same format for FPGA implementations.
      */      
-        reg [31:0] SRAM[8191:0];
+        reg [31:0] SRAM[(N*N)/8-1:0];
         reg [31:0] Qr;
 
         always @(posedge CK) begin

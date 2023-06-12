@@ -2,47 +2,36 @@
 module spike_core 
 import obi_pkg::*;
 #(
-    parameter                   N = 256,
-    parameter                   M = 8,
-    parameter                   INPUT_RESO = 8,
-    parameter type              req_t = logic, // OBI request type
-    parameter type              rsp_t = logic  // OBI response type
+    parameter                               N = 256,
+    parameter type                          req_t = logic, // OBI request type
+    parameter type                          rsp_t = logic  // OBI response type
 ) (
-    input   logic                       CLK,
-    input   logic                       RSTN,
+    input   logic                           CLK,
+    input   logic                           RSTN,
     
     //Start Singal from controller
-    input   logic                       start_i,
-    input   logic                       control_i,
+    input   logic                           start_i,
+    input   logic                           control_i,
 
     // TTFS time tick 
-    input   logic [INPUT_RESO-1:0]      tick_i,
-    input   logic                       next_tick_i,
+    input   logic   [7:0]                   tick_i,
+    input   logic                           next_tick_i,
     
     // OBI BUS Slave interface
-    input   req_t                       spikecore_slave_req_i,
-    output  rsp_t                       spikecore_slave_resp_o,
+    input   req_t                           spikecore_slave_req_i,
+    output  rsp_t                           spikecore_slave_resp_o,
 
     // Spikecore finished
-    output  logic                       spikecore_done_o,
+    output  logic                           spikecore_done_o,
 
     // FIFO output
-    input   logic                       FIFO_r_en_i,
-    output  logic [M-1:0]               FIFO_r_data_o,
-    output  logic                       FIFO_empty_o,
-
-    
-    // // LIF signal
-    // input  logic                    LIF_busy_i,
-    // input  logic                    LIF_done_i,
-    // // AERIN signal
-    // output logic  [M+1:0]           AER_ADDR_o,
-    // output logic                    AER_REQ_o,
-    // input  logic                    AER_ACK_i,
+    input   logic                           FIFO_r_en_i,
+    output  logic   [$clog2(N)-1:0]         FIFO_r_data_o,
+    output  logic                           FIFO_empty_o,
 
     // SPike from AER OUT
-    input  logic                    spike_pushback_i,
-    input  logic [M-1:0]            spike_pushback_addr_i
+    input   logic                           spike_pushback_i,
+    input   logic   [$clog2(N)-1:0]         spike_pushback_addr_i
     
     
 );
@@ -63,7 +52,7 @@ logic filtering;
 // FIFO signals
 logic FIFO_w_en;
 logic FIFO_full;
-logic [M-1:0] FIFO_w_data;
+logic [$clog2(N)-1:0] FIFO_w_data;
 
 logic [3:0] spike_pushback_we;
 
@@ -78,33 +67,34 @@ end
 
 
 assign SRAM_sel = {spikecore_slave_req_i.req, filtering, spike_pushback_i};
+
 always_comb begin : MUX_of_spikeSRAM
     case(SRAM_sel)
     3'b100: begin
-        SRAM_EN = spikecore_slave_req_i.req;
-        SRAM_WE = {4{spikecore_slave_req_i.we}};
-        SRAM_ADDR = spikecore_slave_req_i.addr[$clog2(N)-3:0];
-        SRAM_WDATA = spikecore_slave_req_i.wdata;
-        spikecore_slave_resp_o.rdata = SRAM_RDATA;
+        SRAM_EN                         = spikecore_slave_req_i.req;
+        SRAM_WE                         = {4{spikecore_slave_req_i.we}};
+        SRAM_ADDR                       = spikecore_slave_req_i.addr[$clog2(N)-3:0];
+        SRAM_WDATA                      = spikecore_slave_req_i.wdata;
+        spikecore_slave_resp_o.rdata    = SRAM_RDATA;
     end
     3'b010: begin
-        SRAM_EN = filtering;
-        SRAM_WE = 4'b0;
-        SRAM_ADDR = filter_addr;
-        SRAM_WDATA = 32'b0;
-        filter_spike = SRAM_RDATA;
+        SRAM_EN                         = filtering;
+        SRAM_WE                         = 4'b0;
+        SRAM_ADDR                       = filter_addr;
+        SRAM_WDATA                      = 32'b0;
+        filter_spike                    = SRAM_RDATA;
     end  
     3'b001: begin
-        SRAM_EN = spike_pushback_i;
-        SRAM_WE = spike_pushback_we;
-        SRAM_ADDR = spike_pushback_addr_i>>2;
-        SRAM_WDATA = {4{tick_i-1'b1}};
+        SRAM_EN                         = spike_pushback_i;
+        SRAM_WE                         = spike_pushback_we;
+        SRAM_ADDR                       = spike_pushback_addr_i>>2;
+        SRAM_WDATA                      = {4{tick_i-1'b1}};
     end
     default: begin
-        SRAM_EN = 'b0;
-        SRAM_WE = 'b0;
-        SRAM_ADDR = 'b0;
-        SRAM_WDATA = 'b0;
+        SRAM_EN                         = 'b0;
+        SRAM_WE                         = 'b0;
+        SRAM_ADDR                       = 'b0;
+        SRAM_WDATA                      = 'b0;
     end
     endcase
 end
@@ -121,9 +111,7 @@ end
 
 spike_filter 
 #(
-    .N(256),
-    .M(8),
-    .INPUT_RESO(8),
+    .N(N),
     .req_t(obi_pkg::obi_req_t),
     .resp_t(obi_pkg::obi_req_t)
 )spike_filter_i(
@@ -149,7 +137,7 @@ spike_filter
 spike_FIFO
 #(
     .DEPTH(256),
-    .M(8)
+    .N(N)
 ) spike_FIFO_i (
     .CLK,
     .RSTN,
@@ -163,11 +151,9 @@ spike_FIFO
 
 sram_spike 
 #(
-    .N(256),
-    .M(8),
-    .INPUT_RESO(8)
+    .N(N)
 )sram_spike_i(
-    .CLK,
+    .CLK(CLK),
     .EN(SRAM_EN),
     .WE(SRAM_WE),
     .ADDR(SRAM_ADDR),
@@ -178,9 +164,7 @@ sram_spike
 endmodule
 
 module sram_spike #(
-    parameter                   N = 256,
-    parameter                   M = 8,
-    parameter                   INPUT_RESO = 8
+    parameter                   N = 256
 ) (
     input  logic                     CLK,
     input  logic                     EN,
@@ -189,19 +173,18 @@ module sram_spike #(
     input  logic [31:0]              WDATA,
     output logic [31:0]              RDATA
 );
-    logic [INPUT_RESO-1:0] spike [0:N-1];
+    logic [7:0] spike [0:N-1];
     logic [31:0] temp;
     
-    always_ff @( posedge ~CLK ) begin : SRAM_SPIKE
+    always_ff @( posedge CLK ) begin : SRAM_SPIKE
         if (EN) begin
             spike[4*ADDR]   <= WE[0] ? WDATA[7:0]   : spike[4*ADDR];
             spike[4*ADDR+1] <= WE[1] ? WDATA[15:8]  : spike[4*ADDR+1];
             spike[4*ADDR+2] <= WE[2] ? WDATA[23:16] : spike[4*ADDR+2];
             spike[4*ADDR+3] <= WE[3] ? WDATA[31:24] : spike[4*ADDR+3];
-            temp <= EN ? {spike[4*ADDR+3],spike[4*ADDR+2],spike[4*ADDR+1],spike[4*ADDR]} : temp;
         end
     end
-
+    assign temp  = EN ? {spike[4*ADDR+3],spike[4*ADDR+2],spike[4*ADDR+1],spike[4*ADDR]} : temp;
     assign RDATA = temp;
     
 endmodule

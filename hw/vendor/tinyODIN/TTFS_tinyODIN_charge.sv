@@ -1,7 +1,5 @@
 module TTFS_tinyODIN_charge #(
     parameter                   N = 256,
-    parameter                   M = 8,
-    parameter                   INPUT_RESO = 8,
     parameter type              req_t = logic, // OBI request type
     parameter type              rsp_t = logic  // OBI response type
 ) (
@@ -13,8 +11,6 @@ module TTFS_tinyODIN_charge #(
 
     output  logic                   intr_ODIN_finished_o
 );
-
-// TODO:uniform RSTN
 
 // OBI mux interface
 req_t                       spikecore_slave_req;
@@ -30,18 +26,18 @@ rsp_t                       control_slave_resp;
 // logics
 logic                       spikecore_done;
 logic                       ODIN_done;
-logic   [INPUT_RESO-1:0]    tick;
+logic   [7:0]               tick;
 logic                       next_tick;     
 logic                       FIFO_r_en;
-logic   [M-1:0]             FIFO_r_data;
+logic   [$clog2(N)-1:0]     FIFO_r_data;
 logic                       FIFO_empty;
 logic                       start;
 logic                       open_loop;
 logic                       aer_src_ctrl_neuron;
-logic   [M-1:0]             max_neuron;
-logic   [M-1:0]             count;
+logic   [$clog2(N)-1:0]     max_neuron;
+logic   [$clog2(N)-1:0]     count;
 logic   [  4:0]             charge_count;
-logic   [M-1:0]             neuron_idx;
+logic   [$clog2(N)-1:0]     neuron_idx;
 logic                       neuron_event_write;
 logic                       neuron_event_read;
 logic                       neuron_tref;
@@ -49,7 +45,7 @@ logic   [31:0]              synapse_data;
 logic   [31:0]              neuron_state;
 logic                       neuron_spike;
 logic                       spike_pushback;
-logic   [M-1:0]             spike_pushback_addr;
+logic   [$clog2(N)-1:0]     spike_pushback_addr;
 logic                       inference_done;
 
 logic                       charge_enable;
@@ -81,8 +77,6 @@ tinyODIN_OBI_interface
 tick_generator
 #(
     .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) tick_generator_i (
@@ -98,8 +92,6 @@ tick_generator
 spike_core
 #(
     .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) spike_core_i (
@@ -127,8 +119,6 @@ spike_core
 controller_charge
 #(
     .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) controller_charge_i (
@@ -169,8 +159,6 @@ controller_charge
 neuron_core_charge
 #(
     .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) neuron_core_charge_i
@@ -196,7 +184,6 @@ neuron_core_charge
 synaptic_core
 #(
     .N(N),
-    .M(M),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) synaptic_core_i (
@@ -216,8 +203,7 @@ synaptic_core
 
 spike_output
 #(
-    .M(M),
-    .INPUT_RESO(INPUT_RESO)
+    .N(N)
 ) spike_pushback_i (
     .spike_i(neuron_spike),
     .count_i(count),
@@ -229,9 +215,7 @@ spike_output
 
 charger
 #(
-    .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO)
+    .N(N)
 ) charger_i (
     .CLK,
     .RSTN,

@@ -1,13 +1,12 @@
 module spike_output #(
-    parameter   M = 8,
-    parameter   INPUT_RESO = 8
+    parameter   N = 256
 ) (
-    input   logic                   spike_i,
-    input   logic   [M-1:0]         count_i,
-    input   logic   [INPUT_RESO-1:0]tick_i,
-    output  logic                   spike_pushback_o,
-    output  logic   [M-1:0]         spike_pushback_addr_o,
-    output  logic                   inference_done_o
+    input   logic                           spike_i,
+    input   logic   [$clog2(N)-1:0]         count_i,
+    input   logic   [7:0]tick_i,
+    output  logic                           spike_pushback_o,
+    output  logic   [$clog2(N)-1:0]       spike_pushback_addr_o,
+    output  logic                           inference_done_o
 );
 
     assign spike_pushback_o = spike_i;

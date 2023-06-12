@@ -52,6 +52,14 @@ initial begin
             #10 tinyODIN_slave_req.req = 1'b0;
             #10 tinyODIN_slave_req.we  = 1'b0;
     end
+    for (int i=36; i<64; ++i) begin
+        write_spikecore(
+            .addr(i),
+            .data(32'h0000_0000),
+            .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
+            #10 tinyODIN_slave_req.req = 1'b0;
+            #10 tinyODIN_slave_req.we  = 1'b0;
+    end
 // Initial synapse
     for (int i=0; i<8192; ++i) begin
         write_synapsecore(
@@ -90,7 +98,7 @@ initial begin
     end
     write_control(
         .addr(32'h0),
-        .data(32'hff64_0400),
+        .data(32'hff00_0400),
         .tinyODIN_slave_req_i(tinyODIN_slave_req));
         #10 tinyODIN_slave_req.req = 1'b0;
         #10 tinyODIN_slave_req.we  = 1'b0; 
@@ -99,8 +107,6 @@ end
 TTFS_tinyODIN_charge
 #(
     .N(N),
-    .M(M),
-    .INPUT_RESO(INPUT_RESO),
     .req_t(req_t),
     .rsp_t(rsp_t)
 ) TTFS_tinyODIN_charge (

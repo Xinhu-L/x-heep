@@ -504,8 +504,6 @@ module core_v_mini_mcu
 
   TTFS_tinyODIN_charge #(
       .N(256),
-      .M(8),
-      .INPUT_RESO(8),
       .req_t(obi_req_t),
       .rsp_t(obi_resp_t)
   ) TTFS_tinyODIN_charge_i (

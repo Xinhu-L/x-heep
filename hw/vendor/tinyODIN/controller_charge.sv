@@ -29,15 +29,13 @@ module controller_charge
 import obi_pkg::*;
 #(
     parameter N = 256,
-    parameter M = 8,
-    parameter INPUT_RESO = 8,
     parameter type              req_t = logic, // OBI request type
     parameter type              rsp_t = logic  // OBI response type
 )(    
 
     // Global inputs ------------------------------------------
-    input  logic            CLK,
-    input  logic            RSTN,
+    input   logic                           CLK,
+    input   logic                           RSTN,
     
     // Inputs from AER ----------------------------------------
     // input  logic   [M+1:0]  AERIN_ADDR,
@@ -45,43 +43,43 @@ import obi_pkg::*;
     // output logic            AERIN_ACK,
     
     // Read FIFO ----------------------------------------------
-    output logic            FIFO_r_en_o,
-    input  logic [   M-1:0] FIFO_r_data_i,      
-    input  logic            FIFO_empty_i,      
+    output  logic                           FIFO_r_en_o,
+    input   logic   [$clog2(N)-1:0]         FIFO_r_data_i,      
+    input   logic                           FIFO_empty_i,      
 
     // Spikecore finished -------------------------------------
-    input logic             spikecore_done_i,
+    input   logic                           spikecore_done_i,
     
     // Control interface for readback -------------------------
-    input  req_t            control_slave_req_i,
-    output rsp_t            control_slave_resp_o,
+    input   req_t                           control_slave_req_i,
+    output  rsp_t                           control_slave_resp_o,
 
     // Output control signal
-    output logic            start_o,
+    output  logic                           start_o,
 
-    output logic            open_loop_o,
-    output logic            aer_src_ctrl_neuron_o,
-    output logic [   M-1:0] max_neuron_o,
-    output logic [   M-1:0] count_o,
-    output logic [     4:0] charge_count_o,
+    output  logic                           open_loop_o,
+    output  logic                           aer_src_ctrl_neuron_o,
+    output  logic   [$clog2(N)-1:0]         max_neuron_o,
+    output  logic   [$clog2(N)-1:0]         count_o,
+    output  logic   [$clog2(N/8)-1:0]       charge_count_o,
     
     // Done output
-    output logic            ODIN_done_o,
+    output  logic                           ODIN_done_o,
 
     // Output to neuroncore
-    output logic [   M-1:0] neuron_idx_o,
-    output logic            neuron_event_write_o,
-    output logic            neuron_event_read_o,
-    output logic            neuron_tref_o,
+    output  logic   [$clog2(N)-1:0]         neuron_idx_o,
+    output  logic                           neuron_event_write_o,
+    output  logic                           neuron_event_read_o,
+    output  logic                           neuron_tref_o,
     
     // Input from tick-gen
-    input  logic            next_tick_i,
+    input   logic                           next_tick_i,
 
     // Charger
-    output logic            charge_enable_o,
+    output  logic                           charge_enable_o,
     
     // Inference finished
-    input  logic            inference_done_i
+    input   logic                           inference_done_i
 );
     
 	//----------------------------------------------------------------------------------
@@ -107,13 +105,13 @@ import obi_pkg::*;
 	//	REGS & WIRES
 	//----------------------------------------------------------------------------------
     
-    logic   [31:0]          config_reg;
+    logic   [31:0]                      config_reg;
 
-    logic   [ 7:0]          count;
-    logic   [ 4:0]          charge_count;
-    logic   [ 7:0]          first_layer_neurons;
+    logic   [$clog2(N)-1:0]             count;
+    logic   [$clog2(N/8)-1:0]           charge_count;
+    logic   [7:0]             first_layer_neurons;
 
-    logic                   inference_done;
+    logic                               inference_done;
 
 
 	//----------------------------------------------------------------------------------
@@ -140,12 +138,12 @@ import obi_pkg::*;
     assign control_slave_resp_o.gnt = control_slave_req_i.req;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
-            control_slave_resp_o.rdata  <=  'b0;
-            control_slave_resp_o.rvalid <=  'b0;
-            config_reg                  <=  'b0; 
+            control_slave_resp_o.rdata  <=  '0;
+            control_slave_resp_o.rvalid <=  '0;
+            config_reg                  <=  '0; 
         end
         else if(control_slave_req_i.req && control_slave_req_i.we) begin
-            control_slave_resp_o.rdata  <=  'b0;
+            control_slave_resp_o.rdata  <=  '0;
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
             config_reg                  <=  control_slave_req_i.wdata;
         end
@@ -154,7 +152,7 @@ import obi_pkg::*;
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
         end
         else begin
-            control_slave_resp_o.rdata  <=  'b0;
+            control_slave_resp_o.rdata  <=  '0;
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
         end
     end
@@ -196,7 +194,7 @@ import obi_pkg::*;
                 if(FIFO_empty_i)                                next_state = NEURON_EVENT_PRE;
                 else                                            next_state = CHARGE;
         CHARGE: 
-                if(charge_count == 8'd31)                              next_state = READ_FIFO;
+                if(charge_count == '1)                          next_state = READ_FIFO;
                 else                                            next_state = CHARGE;
         NEURON_EVENT_PRE:
                                                                 next_state = NEURON_EVENT;
@@ -219,20 +217,20 @@ import obi_pkg::*;
     // Time-multiplexed neuron counter
 	always @(posedge CLK or negedge RSTN)
 		if      (!RSTN)                                                                                                                             
-            count <= 8'd0;
-        else if (state == WAIT || (count == 8'd255 && state == NEURON_EVENT) || inference_done_i)            
+            count <= '0;
+        else if (state == WAIT || (count == '1 && state == NEURON_EVENT) || inference_done_i)            
             count <= first_layer_neurons;
 		else if (state == NEURON_EVENT || state == TREF_EVENT)                                                                   
-            count <= count + 8'd1;
+            count <= count + 1'b1;
         else                                                                                                                                        
             count <= count;
     always @(posedge CLK or negedge RSTN)
 		if      (!RSTN)                                                                                                                             
-            charge_count <= 8'd0;
+            charge_count <= '0;
         else if (state == WAIT || (count == 8'd31 && state == CHARGE) || inference_done_i)            
-            charge_count <= 8'd0;
+            charge_count <= '0;
 		else if (state == CHARGE)                                                                   
-            charge_count <= charge_count + 8'd1;
+            charge_count <= charge_count + 1'b1;
         else                                                                                                                                        
             charge_count <= charge_count;
 
