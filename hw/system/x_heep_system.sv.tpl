@@ -80,9 +80,9 @@ ${pad.internal_signals}
 % endfor
 
   core_v_mini_mcu #(
-    .PULP_XPULP(PULP_XPULP),
+    .COREV_PULP(COREV_PULP),
     .FPU(FPU),
-    .PULP_ZFINX(PULP_ZFINX),
+    .ZFINX(ZFINX),
     .EXT_XBAR_NMASTER(EXT_XBAR_NMASTER),
     .X_EXT(X_EXT)
   ) core_v_mini_mcu_i (

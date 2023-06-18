@@ -41,6 +41,9 @@ PAD_CFG  ?= pad_cfg.hjson
 # Compiler options are 'gcc' (default) and 'clang'
 COMPILER ?= gcc
 
+# Compiler prefix options are 'riscv32-unknown-' (default)
+COMPILER_PREFIX ?= riscv32-unknown-
+
 # Arch options are any RISC-V ISA string supported by the CPU. Default 'rv32imc'
 ARCH     ?= rv32imfc
 
@@ -100,7 +103,7 @@ mcu-gen-help:
 ## Runs verible formating
 verible:
 	util/format-verible;
-	
+
 ## @section APP FW Build
 
 ## Generates the build folder in sw using CMake to build (compile and linking)
@@ -108,18 +111,23 @@ verible:
 ## @param TARGET=sim(default),pynq-z2
 ## @param LINKER=on_chip(default),flash_load,flash_exec
 ## @param COMPILER=gcc(default), clang
+## @param COMPILER_PREFIX=riscv32-unknown-(default)
 ## @param ARCH=rv32imc(default), <any RISC-V ISA string supported by the CPU>
 app: clean-app
-	$(MAKE) -C sw PROJECT=$(PROJECT) TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) ARCH=$(ARCH) SOURCE=$(SOURCE)
-	
+	$(MAKE) -C sw PROJECT=$(PROJECT) TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) COMPILER_PREFIX=$(COMPILER_PREFIX) ARCH=$(ARCH) SOURCE=$(SOURCE)
+
 ## Just list the different application names available
 app-list:
-	@echo "Note: Applications outside the X-HEEP sw/applications directory will not be listed."  
+	@echo "Note: Applications outside the X-HEEP sw/applications directory will not be listed."
 	tree sw/applications/
+
+## Compile all the apps present in the repo
+app-compile-all:
+	bash util/compile_all_apps.sh;
 
 ## @section Simulation
 
-## Verilator simulation			
+## Verilator simulation
 verilator-sim:
 	$(FUSESOC) --cores-root . run --no-export --target=sim --tool=verilator $(FUSESOC_FLAGS) --setup --build openhwgroup.org:systems:core-v-mini-mcu 2>&1 | tee buildsim.log
 
@@ -142,11 +150,15 @@ questasim-sim-opt-upf: questasim-sim
 vcs-sim:
 	$(FUSESOC) --cores-root . run --no-export --target=sim --tool=vcs $(FUSESOC_FLAGS) --setup --build openhwgroup.org:systems:core-v-mini-mcu 2>&1 | tee buildsim.log
 
+## VCS-AMS simulation:
+vcs-ams-sim:
+	$(FUSESOC) --cores-root . run --no-export --target=sim --flag "ams_sim" --flag "use_external_device_example" --tool=vcs $(FUSESOC_FLAGS) --setup --build openhwgroup.org:systems:core-v-mini-mcu 2>&1 | tee buildsim.log
+
 ## Generates the build output for helloworld application
 ## Uses verilator to simulate the HW model and run the FW
 ## UART Dumping in uart0.log to show recollected results
 run-helloworld: mcu-gen verilator-sim
-	$(MAKE) -C sw PROJECT=hello_world TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) ARCH=$(ARCH);
+	$(MAKE) -C sw PROJECT=hello_world TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) COMPILER_PREFIX=$(COMPILER_PREFIX) ARCH=$(ARCH);
 	cd ./build/openhwgroup.org_systems_core-v-mini-mcu_0/sim-verilator; \
 	./Vtestharness +firmware=../../../sw/build/main.hex; \
 	cat uart0.log; \
@@ -156,12 +168,12 @@ run-helloworld: mcu-gen verilator-sim
 ## Uses verilator to simulate the HW model and run the FW
 ## UART Dumping in uart0.log to show recollected results
 run-blinkyfreertos: mcu-gen verilator-sim
-	$(MAKE) -C sw PROJECT=blinky_freertos TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) ARCH=$(ARCH);
+	$(MAKE) -C sw PROJECT=blinky_freertos TARGET=$(TARGET) LINKER=$(LINKER) COMPILER=$(COMPILER) COMPILER_PREFIX=$(COMPILER_PREFIX) ARCH=$(ARCH);
 	cd ./build/openhwgroup.org_systems_core-v-mini-mcu_0/sim-verilator; \
 	./Vtestharness +firmware=../../../sw/build/main.hex; \
 	cat uart0.log; \
 	cd ../../..;
-	
+
 ## Uses verilator to simulate the HW model and run the FW
 ## UART Dumping in uart0.log to show recollected results
 run-app-sim:
@@ -207,9 +219,9 @@ flash-prog:
 
 ## Run openOCD w/ EPFL_Programmer
 openOCD_epflp:
-	xterm -e openocd -f ./tb/core-v-mini-mcu-pynq-z2-esl-programmer.cfg; 
+	xterm -e openocd -f ./tb/core-v-mini-mcu-pynq-z2-esl-programmer.cfg;
 
-## Start GDB 
+## Start GDB
 gdb_connect:
 	$(MAKE) -C sw gdb_connect
 
