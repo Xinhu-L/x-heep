@@ -55,7 +55,7 @@ initial begin
     for (int i=36; i<64; ++i) begin
         write_spikecore(
             .addr(i),
-            .data(32'h0000_0000),
+            .data(32'hffff_ffff),
             .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
             #10 tinyODIN_slave_req.req = 1'b0;
             #10 tinyODIN_slave_req.we  = 1'b0;
@@ -102,6 +102,53 @@ initial begin
         .tinyODIN_slave_req_i(tinyODIN_slave_req));
         #10 tinyODIN_slave_req.req = 1'b0;
         #10 tinyODIN_slave_req.we  = 1'b0; 
+
+#5
+    read_synapsecore(
+        .addr(4638),
+        .tinyODIN_slave_req_i(tinyODIN_slave_req));
+        #10 tinyODIN_slave_req.req = 1'b0;
+        #10 tinyODIN_slave_req.we  = 1'b0; 
+    read_synapsecore(
+        .addr(4639),
+        .tinyODIN_slave_req_i(tinyODIN_slave_req));
+        #10 tinyODIN_slave_req.req = 1'b0;
+        #10 tinyODIN_slave_req.we  = 1'b0; 
+
+    #1000000
+
+    for (int i=0; i<256; ++i) begin
+        write_neuroncore(
+            .addr(i[7:0]),
+            .data(32'h0015_e000),
+            .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
+        #10 tinyODIN_slave_req.req = 1'b0;
+        #10 tinyODIN_slave_req.we  = 1'b0;
+    end
+
+    for (int i=0; i<36; ++i) begin
+        write_spikecore(
+            .addr(i),
+            .data(input_spike[i]),
+            .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
+            #10 tinyODIN_slave_req.req = 1'b0;
+            #10 tinyODIN_slave_req.we  = 1'b0;
+    end
+    for (int i=36; i<64; ++i) begin
+        write_spikecore(
+            .addr(i),
+            .data(32'hffff_ffff),
+            .tinyODIN_slave_req_i(tinyODIN_slave_req)); 
+            #10 tinyODIN_slave_req.req = 1'b0;
+            #10 tinyODIN_slave_req.we  = 1'b0;
+    end
+    
+    write_control(
+    .addr(32'h0),
+    .data(32'hff00_0400),
+    .tinyODIN_slave_req_i(tinyODIN_slave_req));
+    #10 tinyODIN_slave_req.req = 1'b0;
+    #10 tinyODIN_slave_req.we  = 1'b0; 
 end
 
 TTFS_tinyODIN_charge
@@ -168,7 +215,7 @@ task read_neuroncore(
 );
     #20;
     tinyODIN_slave_req_i.req  = 1'b1;
-    tinyODIN_slave_req_i.we   = 1'b1;
+    tinyODIN_slave_req_i.we   = 1'b0;
     tinyODIN_slave_req_i.be   = 4'b0000;
     tinyODIN_slave_req_i.addr = {10'b0,2'b01,10'b0,addr,2'b0};
 endtask
@@ -192,7 +239,7 @@ task read_synapsecore(
 );
     #20;
     tinyODIN_slave_req_i.req  = 1'b1;
-    tinyODIN_slave_req_i.we   = 1'b1;
+    tinyODIN_slave_req_i.we   = 1'b0;
     tinyODIN_slave_req_i.be   = 4'b0000;
     tinyODIN_slave_req_i.addr = {10'b0,2'b10,5'b0,addr,2'b0};
 endtask
@@ -216,7 +263,7 @@ task read_control(
 );
     #20;
     tinyODIN_slave_req_i.req  = 1'b1;
-    tinyODIN_slave_req_i.we   = 1'b1;
+    tinyODIN_slave_req_i.we   = 1'b0;
     tinyODIN_slave_req_i.be   = 4'b0000;
     tinyODIN_slave_req_i.addr = {10'b0,2'b11,20'b0};
 endtask

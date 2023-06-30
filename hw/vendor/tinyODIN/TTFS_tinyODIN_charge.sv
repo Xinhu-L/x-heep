@@ -1,7 +1,9 @@
-module TTFS_tinyODIN_charge #(
+`include "obi_pkg.sv"
+module TTFS_tinyODIN_charge
+import obi_pkg::*; #(
     parameter                   N = 256,
-    parameter type              req_t = logic, // OBI request type
-    parameter type              rsp_t = logic  // OBI response type
+    parameter type              req_t = obi_req_t, // OBI request type
+    parameter type              rsp_t = obi_resp_t  // OBI response type
 ) (
     input   logic                               CLK,
     input   logic                               RSTN,
@@ -28,10 +30,10 @@ logic                       spikecore_done;
 logic                       ODIN_done;
 logic   [7:0]               tick;
 logic                       next_tick;     
-logic                       FIFO_r_en;
-logic   [$clog2(N)-1:0]     FIFO_r_data;
-logic                       FIFO_empty;
-logic                       start;
+logic                       spikecore_r_en;
+logic   [$clog2(N)-1:0]     spikecore_r_data;
+logic                       spikecore_empty;
+logic                       spikecore_working;
 logic                       open_loop;
 logic                       aer_src_ctrl_neuron;
 logic   [$clog2(N)-1:0]     max_neuron;
@@ -52,12 +54,14 @@ logic                       charge_enable;
 logic   [ 31:0]             synapse_charge;
 
 
-
 tinyODIN_OBI_interface
 #(
     .req_t(req_t), // OBI request type
     .rsp_t(rsp_t)  // OBI response type
 ) tinyODIN_OBI_interface_i (
+    .CLK,
+    .RSTN,
+    
     .tinyODIN_slave_req_i,
     .tinyODIN_slave_resp_o,
 
@@ -97,8 +101,7 @@ spike_core
 ) spike_core_i (
     .CLK,
     .RSTN,
-    .start_i(start),
-    .control_i(),
+    .spikecore_working_i(spikecore_working),
 
     .tick_i(tick),
     .next_tick_i(next_tick),
@@ -107,9 +110,9 @@ spike_core
     .spikecore_slave_resp_o(spikecore_slave_resp),
     .spikecore_done_o(spikecore_done),
 
-    .FIFO_r_en_i(FIFO_r_en),
-    .FIFO_r_data_o(FIFO_r_data),
-    .FIFO_empty_o(FIFO_empty),
+    .spikecore_r_en_i(spikecore_r_en),
+    .spikecore_r_data_o(spikecore_r_data),
+    .spikecore_empty_o(spikecore_empty),
 
     .spike_pushback_i(spike_pushback),
     .spike_pushback_addr_i(spike_pushback_addr)
@@ -128,13 +131,13 @@ controller_charge
     .control_slave_req_i(control_slave_req),
     .control_slave_resp_o(control_slave_resp),
 
-    .FIFO_r_en_o(FIFO_r_en),
-    .FIFO_r_data_i(FIFO_r_data),
-    .FIFO_empty_i(FIFO_empty),
+    .spikecore_r_en_o(spikecore_r_en),
+    .spikecore_r_data_i(spikecore_r_data),
+    .spikecore_empty_i(spikecore_empty),
     
     .spikecore_done_i(spikecore_done),
     
-    .start_o(start),
+    .spikecore_working_o(spikecore_working),
 
     .open_loop_o(open_loop),
     .aer_src_ctrl_neuron_o(aer_src_ctrl_neuron),
@@ -153,7 +156,8 @@ controller_charge
 
     .charge_enable_o(charge_enable),
 
-    .inference_done_i(inference_done)
+    .inference_done_i(inference_done),
+    .intr_inference_done_o(intr_ODIN_finished_o)
 );
 
 neuron_core_charge
@@ -190,7 +194,6 @@ synaptic_core
     .CLK,
     .RSTN,
 
-    .neuron_event_i(neuron_event_read),
     .neuron_idx_i(neuron_idx),
     .count_i(charge_count),
     .charge_enable_i(charge_enable),
@@ -222,9 +225,9 @@ charger
     .count_i(count[7:2]),
     .synapse_data_i(synapse_data),
     .charge_count_i(charge_count),
-    .chagre_enable_i(charge_enable),
-    .event_tref_i(neuron_tref),
-    .synapse_charge_o(synapse_charge)
+    .charge_enable_i(charge_enable),
+    .synapse_charge_o(synapse_charge),
+    .inference_done_i(inference_done)
 );
 
 

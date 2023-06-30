@@ -31,7 +31,7 @@
 #                                   #
 #####################################
 
-set CLK_PERIOD  	4
+set CLK_PERIOD      10
 set SCK_PERIOD  	50
 
 set IO_DLY			5

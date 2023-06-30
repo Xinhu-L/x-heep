@@ -1,6 +1,6 @@
 module spike_FIFO #(
-    parameter                   DEPTH = 256,
-    parameter                   N = 256
+    parameter                   DEPTH = 1,
+    parameter                   N = 1
     
 ) (
     input   logic                           CLK,
@@ -59,9 +59,12 @@ always_ff @( posedge CLK or negedge RSTN ) begin
 end
 
 always_ff @( posedge CLK or negedge RSTN ) begin 
-    if (FIFO_w_en_i&&~full) begin
-        FIFO[w_ptr] <= FIFO_w_data_i;
+    if (!RSTN) begin
+        FIFO[w_ptr] <= FIFO[w_ptr];
     end
+    else if (FIFO_w_en_i&&~full) begin
+        FIFO[w_ptr] <= FIFO_w_data_i;
+    end 
 end
 
 always_ff @( posedge CLK or negedge RSTN ) begin 

@@ -37,13 +37,12 @@ module synaptic_core #(
     input   logic                           RSTN,
     
     // Inputs from controller ---------------------------------
-    input   logic                           neuron_event_i,
     input   logic   [$clog2(N)-1:0]         neuron_idx_i,
-    input   logic   [$clog2(N)-1:0]         count_i,
+    input   logic   [$clog2(N/8)-1:0]       count_i,
     input   logic                           charge_enable_i,
     
     // Outputs ------------------------------------------------
-    output  logic   [31:0]               synapse_data_o,
+    output  logic   [31:0]                  synapse_data_o,
     
     // Form OBI BUS -------------------------------------------
     input   req_t                           synapsecore_slave_req_i,
@@ -55,15 +54,17 @@ module synaptic_core #(
     logic   [$clog2((N*N)/8)-1:0]   synarray_addr;
     logic   [31:0]                  synarray_wdata,synarray_rdata; 
     logic                           synarray_valid;
+    logic                           rvalid_temp;
        
-    assign synarray_cs      = neuron_event_i || charge_enable_i || synapsecore_slave_req_i.req;
+    assign synarray_cs      = charge_enable_i || synapsecore_slave_req_i.req;
     assign synarray_we      = synapsecore_slave_req_i.we;
-    assign synarray_addr    = neuron_event_i ? {neuron_idx_i,count_i[7:3]} : charge_enable_i ? {neuron_idx_i,count_i[4:0]} : synapsecore_slave_req_i.req ? synapsecore_slave_req_i.addr : 'b0;
+    assign synarray_addr    = charge_enable_i ? {neuron_idx_i,count_i[4:0]} : synapsecore_slave_req_i.req ? synapsecore_slave_req_i.addr : 'b0;
     assign synarray_wdata   = synapsecore_slave_req_i.wdata;
     assign synapse_data_o   = synarray_rdata;
     
     // OBI interface
     assign synapsecore_slave_resp_o.gnt = synapsecore_slave_req_i.req;
+    assign synapsecore_slave_resp_o.rdata = synarray_rdata;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
             synapsecore_slave_resp_o.rvalid <= '0;
@@ -79,7 +80,7 @@ module synaptic_core #(
     ) synarray_0 (
         
         // Global inputs
-        .CK         (~CLK),
+        .CK         (CLK),
 	
 		// Control and data inputs
 		.CS         (synarray_cs),
@@ -113,7 +114,6 @@ module SRAM_8192x32_wrapper#(
     // Data output
     output  [31:0]                  Q                         // Data output bus (read)   
 );
-
 
     /*
      *  Simple behavioral code for simulation, to be replaced by a 8192-word 32-bit SRAM macro 

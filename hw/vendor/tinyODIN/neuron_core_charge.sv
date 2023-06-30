@@ -92,7 +92,7 @@ import obi_pkg::*;
 
     //
     always_ff @( posedge CLK or negedge RSTN ) begin 
-        if (RSTN) begin
+        if (!RSTN) begin
             req_req <= 'b0;
             req_we  <= 'b0;
         end
@@ -101,6 +101,7 @@ import obi_pkg::*;
 
     // OBI interface
     assign neuroncore_slave_resp_o.gnt = neuroncore_slave_req_i.req;
+    assign neuroncore_slave_resp_o.rdata = neurarray_rdata;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
             neuroncore_slave_resp_o.rvalid <= 1'b0;

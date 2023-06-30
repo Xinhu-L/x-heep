@@ -37,17 +37,10 @@ import obi_pkg::*;
     input   logic                           CLK,
     input   logic                           RSTN,
     
-    // Inputs from AER ----------------------------------------
-    // input  logic   [M+1:0]  AERIN_ADDR,
-    // input  logic            AERIN_REQ,
-    // output logic            AERIN_ACK,
-    
-    // Read FIFO ----------------------------------------------
-    output  logic                           FIFO_r_en_o,
-    input   logic   [$clog2(N)-1:0]         FIFO_r_data_i,      
-    input   logic                           FIFO_empty_i,      
-
-    // Spikecore finished -------------------------------------
+    // From spikecore -----------------------------------------
+    output  logic                           spikecore_r_en_o,
+    input   logic   [$clog2(N)-1:0]         spikecore_r_data_i,      
+    input   logic                           spikecore_empty_i,      
     input   logic                           spikecore_done_i,
     
     // Control interface for readback -------------------------
@@ -55,7 +48,7 @@ import obi_pkg::*;
     output  rsp_t                           control_slave_resp_o,
 
     // Output control signal
-    output  logic                           start_o,
+    output  logic                           spikecore_working_o,
 
     output  logic                           open_loop_o,
     output  logic                           aer_src_ctrl_neuron_o,
@@ -79,7 +72,8 @@ import obi_pkg::*;
     output  logic                           charge_enable_o,
     
     // Inference finished
-    input   logic                           inference_done_i
+    input   logic                           inference_done_i,
+    output  logic                           intr_inference_done_o
 );
     
 	//----------------------------------------------------------------------------------
@@ -89,7 +83,7 @@ import obi_pkg::*;
 	// FSM states 
     // TODO: neuron event and ref event
     enum logic[3:0] { 
-        WAIT                    = 4'd0,
+        IDLE                    = 4'd0,
         WAIT_SPIKE              = 4'd1,
         READ_FIFO               = 4'd2,
         CHARGE                  = 4'd3,
@@ -109,7 +103,7 @@ import obi_pkg::*;
 
     logic   [$clog2(N)-1:0]             count;
     logic   [$clog2(N/8)-1:0]           charge_count;
-    logic   [7:0]             first_layer_neurons;
+    logic   [7:0]                       first_layer_neurons;
 
     logic                               inference_done;
 
@@ -118,7 +112,7 @@ import obi_pkg::*;
 	//	EVENT TYPE DECODING 
 	//----------------------------------------------------------------------------------
 
-    assign start                    = config_reg[10] && (!inference_done);
+    assign start                    = config_reg[10] && (!config_reg[0]);
     assign neur_event               = config_reg[9];
     assign tref_event               = config_reg[8];
     assign event_addr               = config_reg[7:0];
@@ -128,37 +122,40 @@ import obi_pkg::*;
     assign open_loop_o              = config_reg[15];  
     assign aer_src_ctrl_neuron_o    = config_reg[14];  
 
-    assign start_o                  = start;
+    assign spikecore_working_o      = start;
     assign count_o                  = count;
     assign charge_count_o           = charge_count;
+
+    assign intr_inference_done_o    = inference_done;
 
 	//----------------------------------------------------------------------------------
 	//	Config register
 	//----------------------------------------------------------------------------------
     assign control_slave_resp_o.gnt = control_slave_req_i.req;
+    assign control_slave_resp_o.rdata  =  config_reg;
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
-            control_slave_resp_o.rdata  <=  '0;
             control_slave_resp_o.rvalid <=  '0;
             config_reg                  <=  '0; 
         end
-        else if(control_slave_req_i.req && control_slave_req_i.we) begin
-            control_slave_resp_o.rdata  <=  '0;
+        else if(control_slave_req_i.req &&  control_slave_req_i.we) begin
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
             config_reg                  <=  control_slave_req_i.wdata;
         end
-        else if(control_slave_req_i.req && (~control_slave_req_i.we)) begin
-            control_slave_resp_o.rdata  <=  config_reg;
+        else if(control_slave_req_i.req && (!control_slave_req_i.we)) begin
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
+            config_reg                  <=  {config_reg[31:1], inference_done};
         end
         else begin
-            control_slave_resp_o.rdata  <=  '0;
             control_slave_resp_o.rvalid <=  control_slave_resp_o.gnt;
+            config_reg                  <=  {config_reg[31:1], inference_done};
         end
     end
 
     always_ff @(posedge CLK or negedge RSTN) begin
         if (!RSTN) begin
+            inference_done <= 'b0;
+        end else if (control_slave_req_i.we) begin
             inference_done <= 'b0;
         end
         else if (inference_done_i == 1'b1) begin
@@ -176,40 +173,40 @@ import obi_pkg::*;
     // State register
 	always_ff @(posedge CLK or negedge RSTN)
 	begin
-		if   (!RSTN) state <= WAIT;
+		if   (!RSTN) state <= IDLE;
 		else       state <= next_state;
 	end
     
 	// Next state logic
 	always_comb begin 
         case(state)
-        WAIT:	
-                if(start)                                       next_state = WAIT_SPIKE;
-                else                                            next_state = WAIT;
+        IDLE:	
+                if(start && !inference_done)                         next_state = WAIT_SPIKE;
+                else                                                next_state = IDLE;
         WAIT_SPIKE:
-                if(spikecore_done_i && FIFO_empty_i)            next_state = NEURON_EVENT_PRE;
-                else if(spikecore_done_i && !FIFO_empty_i)      next_state = READ_FIFO;
-                else                                            next_state = WAIT_SPIKE;
+                if(spikecore_done_i && spikecore_empty_i)           next_state = NEURON_EVENT_PRE;
+                else if(spikecore_done_i && !spikecore_empty_i)     next_state = READ_FIFO;
+                else if(inference_done_i)                           next_state = IDLE;
+                else                                                next_state = WAIT_SPIKE;
         READ_FIFO:
-                if(FIFO_empty_i)                                next_state = NEURON_EVENT_PRE;
-                else                                            next_state = CHARGE;
+                if(spikecore_empty_i)                               next_state = NEURON_EVENT_PRE;
+                else                                                next_state = CHARGE;
         CHARGE: 
-                if(charge_count == '1)                          next_state = READ_FIFO;
-                else                                            next_state = CHARGE;
+                if(charge_count == '1)                              next_state = READ_FIFO;
+                else                                                next_state = CHARGE;
         NEURON_EVENT_PRE:
-                                                                next_state = NEURON_EVENT;
+                                                                    next_state = NEURON_EVENT;
         NEURON_EVENT:
                 if(count == max_neuron_o)                       next_state = NEURON_EVENT_END;
                 else                                            next_state = NEURON_EVENT;
         NEURON_EVENT_END:
-                                                                next_state = WAIT_NEXT_TICK;
-        //TODO: Dead loop in to cal & tref      
+                                                                next_state = WAIT_NEXT_TICK;   
         TREF_EVENT:
                 if(count == max_neuron_o)                       next_state = NEURON_EVENT_END;
                 else                                            next_state = TREF_EVENT;
         WAIT_NEXT_TICK:
                 if(next_tick_i)                                 next_state = WAIT_SPIKE;
-                else                                            next_state = WAIT;
+                else                                            next_state = IDLE;
         default:                                                next_state = state;
 		endcase 
     end
@@ -218,7 +215,7 @@ import obi_pkg::*;
 	always @(posedge CLK or negedge RSTN)
 		if      (!RSTN)                                                                                                                             
             count <= '0;
-        else if (state == WAIT || (count == '1 && state == NEURON_EVENT) || inference_done_i)            
+        else if (state == IDLE || (count == '1 && state == NEURON_EVENT) || inference_done_i)            
             count <= first_layer_neurons;
 		else if (state == NEURON_EVENT || state == TREF_EVENT)                                                                   
             count <= count + 1'b1;
@@ -227,17 +224,18 @@ import obi_pkg::*;
     always @(posedge CLK or negedge RSTN)
 		if      (!RSTN)                                                                                                                             
             charge_count <= '0;
-        else if (state == WAIT || (count == 8'd31 && state == CHARGE) || inference_done_i)            
+        else if (state == IDLE || (count == 8'd31 && state == CHARGE) || inference_done_i)            
             charge_count <= '0;
 		else if (state == CHARGE)                                                                   
             charge_count <= charge_count + 1'b1;
         else                                                                                                                                        
             charge_count <= charge_count;
 
+
     // Output logic      
     always @(*) begin
-        if (state == WAIT) begin
-            FIFO_r_en_o             = 'b0;
+        if (state == IDLE) begin
+            spikecore_r_en_o             = 'b0;
             neuron_idx_o            = 'b0;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b0;
@@ -246,7 +244,7 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == WAIT_SPIKE) begin
-            FIFO_r_en_o             = 'b0;
+            spikecore_r_en_o             = 'b0;
             neuron_idx_o            = 'b0;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b0;
@@ -255,7 +253,7 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == READ_FIFO) begin
-            FIFO_r_en_o             = 'b1;
+            spikecore_r_en_o             = 'b1;
             neuron_idx_o            = 'b0;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b0;
@@ -264,8 +262,8 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == CHARGE) begin
-            FIFO_r_en_o             = 'b0;
-            neuron_idx_o            = FIFO_r_data_i;
+            spikecore_r_en_o             = 'b0;
+            neuron_idx_o            = spikecore_r_data_i;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b0;
             neuron_event_read_o     = 'b0;
@@ -273,8 +271,8 @@ import obi_pkg::*;
             charge_enable_o         = 'b1;
         end
         else if (state == NEURON_EVENT_PRE) begin
-            FIFO_r_en_o             = 'b0;
-            neuron_idx_o            = FIFO_r_data_i;
+            spikecore_r_en_o             = 'b0;
+            neuron_idx_o            = spikecore_r_data_i;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b0;
             neuron_event_read_o     = 'b1;
@@ -282,8 +280,8 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == NEURON_EVENT) begin
-            FIFO_r_en_o             = 'b0;
-            neuron_idx_o            = FIFO_r_data_i;
+            spikecore_r_en_o             = 'b0;
+            neuron_idx_o            = spikecore_r_data_i;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b1;
             neuron_event_read_o     = 'b1;
@@ -291,8 +289,8 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == NEURON_EVENT_END) begin
-            FIFO_r_en_o             = 'b0;
-            neuron_idx_o            = FIFO_r_data_i;
+            spikecore_r_en_o             = 'b0;
+            neuron_idx_o            = spikecore_r_data_i;
             neuron_tref_o           = 'b0;
             neuron_event_write_o    = 'b1;
             neuron_event_read_o     = 'b0;
@@ -300,7 +298,7 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == TREF_EVENT) begin
-            FIFO_r_en_o             = 'b0;
+            spikecore_r_en_o             = 'b0;
             neuron_idx_o            = 'b0;
             neuron_tref_o           = 'b1;
             neuron_event_write_o    = 'b1;
@@ -309,7 +307,7 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else if (state == WAIT_NEXT_TICK) begin
-            FIFO_r_en_o             = 'b0;
+            spikecore_r_en_o             = 'b0;
             neuron_idx_o            = 'b0;
             neuron_tref_o           = 'b1;
             neuron_event_write_o    = 'b0;
@@ -318,7 +316,7 @@ import obi_pkg::*;
             charge_enable_o         = 'b0;
         end
         else begin
-            FIFO_r_en_o             = FIFO_r_en_o;
+            spikecore_r_en_o        = spikecore_r_en_o;
             neuron_idx_o            = neuron_idx_o;
             neuron_tref_o           = neuron_tref_o;
             neuron_event_write_o    = neuron_event_write_o;

@@ -6,7 +6,8 @@
  * Description: OBI package, contains common system definitions.
  *
  */
-
+ `ifndef OBI_PKG
+ `define OBI_PKG
 package obi_pkg;
 
   typedef struct packed {
@@ -24,3 +25,5 @@ package obi_pkg;
   } obi_resp_t;
 
 endpackage
+
+`endif

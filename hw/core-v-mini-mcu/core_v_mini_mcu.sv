@@ -7,7 +7,7 @@ module core_v_mini_mcu
   import reg_pkg::*;
 #(
     parameter COREV_PULP = 0,
-    parameter FPU = 0,
+    parameter FPU = 1,
     parameter ZFINX = 0,
     parameter EXT_XBAR_NMASTER = 0,
     parameter X_EXT = 0,  // eXtension interface in cv32e40x
@@ -114,8 +114,8 @@ module core_v_mini_mcu
     input logic gpio_17_i,
     output logic gpio_17_oe_o,
 
-    output logic spi_flash_sck_o,
-    input  logic spi_flash_sck_i,
+        output logic spi_flash_sck_o,
+    input logic spi_flash_sck_i,
     output logic spi_flash_sck_oe_o,
 
         output logic spi_flash_cs_0_o,
@@ -174,32 +174,32 @@ module core_v_mini_mcu
     input logic pdm2pcm_pdm_i,
     output logic pdm2pcm_pdm_oe_o,
     output logic gpio_18_o,
-    input  logic gpio_18_i,
+    input logic gpio_18_i,
     output logic gpio_18_oe_o,
 
         output logic pdm2pcm_clk_o,
     input logic pdm2pcm_clk_i,
     output logic pdm2pcm_clk_oe_o,
     output logic gpio_19_o,
-    input  logic gpio_19_i,
+    input logic gpio_19_i,
     output logic gpio_19_oe_o,
 
-    output logic i2s_sck_o,
-    input  logic i2s_sck_i,
+        output logic i2s_sck_o,
+    input logic i2s_sck_i,
     output logic i2s_sck_oe_o,
     output logic gpio_20_o,
-    input  logic gpio_20_i,
+    input logic gpio_20_i,
     output logic gpio_20_oe_o,
 
-    output logic i2s_ws_o,
-    input  logic i2s_ws_i,
+        output logic i2s_ws_o,
+    input logic i2s_ws_i,
     output logic i2s_ws_oe_o,
     output logic gpio_21_o,
-    input  logic gpio_21_i,
+    input logic gpio_21_i,
     output logic gpio_21_oe_o,
 
-    output logic i2s_sd_o,
-    input  logic i2s_sd_i,
+        output logic i2s_sd_o,
+    input logic i2s_sd_i,
     output logic i2s_sd_oe_o,
     output logic gpio_22_o,
     input logic gpio_22_i,
@@ -654,7 +654,7 @@ module core_v_mini_mcu
       .pdm2pcm_clk_o(pdm2pcm_clk_o),
       .pdm2pcm_clk_en_o(pdm2pcm_clk_oe_o),
       .pdm2pcm_pdm_i(pdm2pcm_pdm_i),
-      .intr_ODIN_finished_i(intr_ODIN_finished)
+      .intr_ODIN_finished_i(intr_ODIN_finished),
       .i2s_sck_o(i2s_sck_o),
       .i2s_sck_oe_o(i2s_sck_oe_o),
       .i2s_sck_i(i2s_sck_i),

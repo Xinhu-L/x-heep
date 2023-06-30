@@ -25,6 +25,24 @@ typedef struct tinyODIN {
   mmio_region_t base_addr;
 } tinyODIN_t;
 
+typedef enum tinyODIN_result {
+  /**
+   * Indicates that the operation succeeded.
+   */
+  ktinyODINOk = 0,
+  /**
+   * Indicates some unspecified failure.
+   */
+  ktinyODINError = 1,
+  /**
+   * Indicates that some parameter passed into a function failed a
+   * precondition.
+   *
+   * When this value is returned, no hardware operations occurred.
+   */
+  ktinyODINBadArg = 2,
+} tinyODIN_result_t;
+
 uint32_t tinyODIN_spike_core_read(const tinyODIN_t *tinyODIN, const ptrdiff_t read_addr);
 
 

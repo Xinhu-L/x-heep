@@ -4,7 +4,7 @@
 
 module tb_top #(
     parameter COREV_PULP = 0,
-    parameter FPU        = 0,
+    parameter FPU        = 1,
     parameter ZFINX      = 0,
     parameter JTAG_DPI   = 0
 );

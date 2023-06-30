@@ -4,7 +4,7 @@ CAPI=2:
 # Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
 # SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
 
-name: "pulp-platform.org:ip:tinyODIN"
+name: "x-heep:ip:tinyODIN"
 
 filesets:
   files_rtl:

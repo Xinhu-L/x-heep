@@ -6,9 +6,9 @@ module x_heep_system
   import obi_pkg::*;
   import reg_pkg::*;
 #(
-    parameter PULP_XPULP = 0,
+    parameter COREV_PULP = 0,
     parameter FPU = 1,
-    parameter PULP_ZFINX = 0,
+    parameter ZFINX = 0,
     parameter EXT_XBAR_NMASTER = 0,
     parameter X_EXT = 0,  // eXtension interface in cv32e40x
     //do not touch these parameters

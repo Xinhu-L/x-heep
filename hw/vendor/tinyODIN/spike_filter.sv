@@ -10,12 +10,12 @@ import obi_pkg::*;
     input  logic                            RSTN,
 
     // Start filter
-    input  logic                            start_i,
+    input  logic                            spikecore_working_i,
 
     // Intereact with Spike Core
     input  logic    [31:0]                  filter_spike_i, 
     output logic    [$clog2(N)-3:0]         filter_addr_o,
-    output logic                            filter_o,                                                    
+    output logic                            filter_read_en_o,                                                    
 
     // From Tick generator
     input  logic    [7:0]                   tick_i,
@@ -34,23 +34,15 @@ import obi_pkg::*;
 
 logic [$clog2(N)-3:0]  filter_addr;
 
-
-
-logic [7:0] input_spike [0:3];
 logic [3:0] match;
 logic match_found;
-assign input_spike[3] = filter_spike_i[31:24];
-assign input_spike[2] = filter_spike_i[23:16];
-assign input_spike[1] = filter_spike_i[15:8];
-assign input_spike[0] = filter_spike_i[7:0];
-assign match[0] = (tick_i==input_spike[0]); 
-assign match[1] = (tick_i==input_spike[1]); 
-assign match[2] = (tick_i==input_spike[2]); 
-assign match[3] = (tick_i==input_spike[3]); 
+assign match[0] = (tick_i==filter_spike_i[7:0]); 
+assign match[1] = (tick_i==filter_spike_i[15:8]); 
+assign match[2] = (tick_i==filter_spike_i[23:16]); 
+assign match[3] = (tick_i==filter_spike_i[31:24]); 
 assign match_found = |match;
+
 logic [$clog2(N)-1:0]          FIFO_w_data;
-
-
 logic [($clog2(N/(32/8)))-1:0] fetch_counter;
 logic [$clog2(32/8)-1:0]       check_counter;
 
@@ -74,7 +66,7 @@ end
 always_comb begin : state_jump_condition
     case(state)
     IDLE:begin
-        if(start_i==1'b1) begin
+        if(spikecore_working_i==1'b1) begin
             next_state = FETCH;
         end
         else begin
@@ -82,7 +74,7 @@ always_comb begin : state_jump_condition
         end
     end
     FETCH:begin
-        if (match_found==1'b1) begin
+        if (spikecore_working_i && match_found==1'b1) begin
             next_state = CHECK;
         end
         else if (fetch_counter==6'h3f) begin
@@ -95,7 +87,7 @@ always_comb begin : state_jump_condition
     end
     CHECK:begin
 
-        if (input_spike[check_counter]==tick_i) begin
+        if (spikecore_working_i && match[check_counter]=='b1) begin
             next_state = PUSH;
         end
         else if(check_counter==2'b11) begin
@@ -117,7 +109,7 @@ always_comb begin : state_jump_condition
         end
     end
     DONE:begin
-        if(next_tick_i==2'b01) begin
+        if(next_tick_i) begin
             next_state = IDLE;
         end
         else begin
@@ -134,32 +126,32 @@ end
 
 always_comb begin 
     if(!RSTN) begin
-        filter_o        = 'b0;
+        filter_read_en_o        = 'b0;
         FIFO_w_en_o     = 'b0;  
         spikecore_done_o= 'b0; 
     end
     else if (state==FETCH) begin
-        filter_o        = 'b1;
+        filter_read_en_o        = 'b1;
         FIFO_w_en_o     = 'b0;
         spikecore_done_o= 'b0;
     end
     else if (state==CHECK) begin
-        filter_o        = 'b0;
+        filter_read_en_o        = 'b0;
         FIFO_w_en_o     = 'b0;
         spikecore_done_o= 'b0;
     end
     else if (state==PUSH) begin
-        filter_o        = 'b0;
+        filter_read_en_o        = 'b0;
         FIFO_w_en_o     = 'b1;
         spikecore_done_o= 'b0;
     end
     else if (state==DONE) begin
-        filter_o        = 'b0;
+        filter_read_en_o        = 'b0;
         FIFO_w_en_o     = 'b0;
         spikecore_done_o= 'b1;
     end
     else begin
-        filter_o        = 'b0;
+        filter_read_en_o        = 'b0;
         FIFO_w_en_o     = 'b0;
         spikecore_done_o= 'b0;
     end

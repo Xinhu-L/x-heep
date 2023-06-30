@@ -7,7 +7,7 @@ module core_v_mini_mcu
   import reg_pkg::*;
 #(
     parameter COREV_PULP = 0,
-    parameter FPU = 0,
+    parameter FPU = 1,
     parameter ZFINX = 0,
     parameter EXT_XBAR_NMASTER = 0,
     parameter X_EXT = 0,  // eXtension interface in cv32e40x
@@ -408,7 +408,7 @@ module core_v_mini_mcu
       .pdm2pcm_clk_o(pdm2pcm_clk_o),
       .pdm2pcm_clk_en_o(pdm2pcm_clk_oe_o),
       .pdm2pcm_pdm_i(pdm2pcm_pdm_i),
-      .intr_ODIN_finished_i(intr_ODIN_finished)
+      .intr_ODIN_finished_i(intr_ODIN_finished),
       .i2s_sck_o(i2s_sck_o),
       .i2s_sck_oe_o(i2s_sck_oe_o),
       .i2s_sck_i(i2s_sck_i),

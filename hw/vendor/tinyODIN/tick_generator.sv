@@ -27,13 +27,13 @@ assign next_tick_o      = spikecore_done_i && ODIN_done_i;
 
 always_ff @( posedge CLK or negedge RSTN ) begin 
     if(!RSTN)begin
-        tick        <= 8'd255;
+        tick        <= 8'd0;
     end
     else if (inference_done_i) begin
-        tick        <= 8'd255;
+        tick        <= 8'd0;
     end
     else if (spikecore_done_i && ODIN_done_i) begin
-        tick        <= tick - 'b1;
+        tick        <= tick + 'b1;
     end 
     else begin
         tick        <= tick;
