@@ -44,6 +44,8 @@ filesets:
     - hw/core-v-mini-mcu/debug_subsystem.sv
     - hw/core-v-mini-mcu/peripheral_subsystem.sv
     - hw/core-v-mini-mcu/ao_peripheral_subsystem.sv
+    - hw/core-v-mini-mcu/pre_load_mem.sv
+    - hw/core-v-mini-mcu/pre_load_bram.sv
     file_type: systemVerilogSource
 
   rtl-simulation:

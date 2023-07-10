@@ -65,7 +65,10 @@ module system_bus
     input  obi_resp_t ext_xbar_slave_resp_i,
 
     output obi_req_t  tinyODIN_slave_req_o,
-    input  obi_resp_t tinyODIN_slave_resp_i
+    input  obi_resp_t tinyODIN_slave_resp_i,
+    
+    input  obi_req_t  pre_load_mem_master_req_i,
+    output obi_resp_t pre_load_mem_master_resp_o
 );
 
   import core_v_mini_mcu_pkg::*;
@@ -89,6 +92,7 @@ module system_bus
   assign master_req[core_v_mini_mcu_pkg::DEBUG_MASTER_IDX] = debug_master_req_i;
   assign master_req[core_v_mini_mcu_pkg::DMA_MASTER0_CH0_IDX] = dma_master0_ch0_req_i;
   assign master_req[core_v_mini_mcu_pkg::DMA_MASTER1_CH0_IDX] = dma_master1_ch0_req_i;
+  assign master_req[core_v_mini_mcu_pkg::PRE_LOAD_MEM_IDX] = pre_load_mem_master_req_i; 
 
   for (genvar i = 0; i < EXT_XBAR_NMASTER; i++) begin : gen_ext_master_req_map
     assign master_req[core_v_mini_mcu_pkg::SYSTEM_XBAR_NMASTER+i] = ext_xbar_master_req_i[i];
@@ -100,6 +104,7 @@ module system_bus
   assign debug_master_resp_o = master_resp[core_v_mini_mcu_pkg::DEBUG_MASTER_IDX];
   assign dma_master0_ch0_resp_o = master_resp[core_v_mini_mcu_pkg::DMA_MASTER0_CH0_IDX];
   assign dma_master1_ch0_resp_o = master_resp[core_v_mini_mcu_pkg::DMA_MASTER1_CH0_IDX];
+  assign pre_load_mem_master_resp_o = master_resp[core_v_mini_mcu_pkg::PRE_LOAD_MEM_IDX];
 
 
   if (EXT_XBAR_NMASTER == 0) begin

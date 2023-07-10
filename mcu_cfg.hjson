@@ -153,6 +153,11 @@
         length:  0x01000000,
     },
 
+    pre_load_mem: {
+        address: 0x60000000,
+        length:  0x01000000,
+    },
+
     ext_slaves: {
         address: 0xF0000000,
         length:  0x01000000,

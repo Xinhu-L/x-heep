@@ -170,6 +170,12 @@ module core_v_mini_mcu
   obi_req_t   tinyODIN_slave_req;
   obi_resp_t  tinyODIN_slave_resp;
   logic intr_ODIN_finished;
+
+  // Pre_load
+  obi_req_t   pre_load_mem_master_req;
+  obi_resp_t  pre_load_mem_master_resp;
+  logic     pre_load_finished;
+  
   // I2s
   logic i2s_rx_valid;
 
@@ -265,7 +271,9 @@ module core_v_mini_mcu
       .ext_xbar_slave_req_o(ext_xbar_slave_req_o),
       .ext_xbar_slave_resp_i(ext_xbar_slave_resp_i),
       .tinyODIN_slave_req_o(tinyODIN_slave_req),
-      .tinyODIN_slave_resp_i(tinyODIN_slave_resp)
+      .tinyODIN_slave_resp_i(tinyODIN_slave_resp),
+      .pre_load_mem_master_req_i(pre_load_mem_master_req),
+      .pre_load_mem_master_resp_o(pre_load_mem_master_resp)
   );
 
   TTFS_tinyODIN_charge #(
@@ -278,6 +286,17 @@ module core_v_mini_mcu
       .tinyODIN_slave_req_i(tinyODIN_slave_req),
       .tinyODIN_slave_resp_o(tinyODIN_slave_resp),
       .intr_ODIN_finished_o(intr_ODIN_finished)
+  );
+  
+  pre_load_mem #(
+    .obi_req_t(obi_req_t),
+    .obi_resp_t(obi_resp_t)
+  ) pre_load_mem_i (
+    .clk_i,
+    .rst_ni,
+    .pre_load_mem_master_req_o(pre_load_mem_master_req),
+    .pre_load_mem_master_resp_i(pre_load_mem_master_resp),
+    .pre_load_finished_o(pre_load_finished)
   );
 
   memory_subsystem #(
@@ -296,6 +315,7 @@ module core_v_mini_mcu
       .rst_ni,
       .slave_req_i(ao_peripheral_slave_req),
       .slave_resp_o(ao_peripheral_slave_resp),
+      .pre_load_finished_i(pre_load_finished),
       .boot_select_i,
       .execute_from_flash_i,
       .exit_valid_o,

@@ -5,7 +5,7 @@
 
 set design_name      xilinx_clk_wizard
 set in_clk_freq_MHz  125
-set out_clk_freq_MHz 20
+set out_clk_freq_MHz 10
 
 # Select board
 set_property -name "board_part_repo_paths" -value "[file normalize "../../../hw/fpga/board_files/"]" -objects [current_project]

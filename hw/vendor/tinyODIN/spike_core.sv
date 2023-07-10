@@ -17,7 +17,7 @@ import obi_pkg::*;
     input   logic                           next_tick_i,
     
     // OBI BUS Slave interface
-    input   req_t                           spikecore_slave_req_i,
+    (*mark_debug="true"*)input   req_t                           spikecore_slave_req_i,
     output  rsp_t                           spikecore_slave_resp_o,
 
     // Spikecore finished
@@ -167,11 +167,11 @@ module sram_spike #(
     parameter                   N = 256
 ) (
     input  logic                     CLK,
-    input  logic                     EN,
-    input  logic [3:0]               WE,
-    input  logic [$clog2(N)-3:0]     ADDR,
+    (*mark_debug="true"*)input  logic                     EN,
+    (*mark_debug="true"*)input  logic [3:0]               WE,
+    (*mark_debug="true"*)input  logic [$clog2(N)-3:0]     ADDR,
     input  logic [31:0]              WDATA,
-    output logic [31:0]              RDATA
+    (*mark_debug="true"*)output logic [31:0]              RDATA
 );
     logic [31:0] spike [0:N/4-1];
     always_ff @( posedge CLK ) begin : SRAM_SPIKE

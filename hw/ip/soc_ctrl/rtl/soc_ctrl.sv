@@ -15,12 +15,15 @@ module soc_ctrl #(
     input  reg_req_t reg_req_i,
     output reg_rsp_t reg_rsp_o,
 
+    input  logic pre_load_finished_i,
+
     input  logic boot_select_i,
     input  logic execute_from_flash_i,
     output logic use_spimemio_o,
 
     output logic        exit_valid_o,
     output logic [31:0] exit_value_o
+
 );
 
   import soc_ctrl_reg_pkg::*;
@@ -40,11 +43,13 @@ module soc_ctrl #(
       testbench_set_exit_loop[0] <= '0;
     end
   end
-  assign hw2reg.boot_exit_loop.d  = testbench_set_exit_loop[0];
-  assign hw2reg.boot_exit_loop.de = testbench_set_exit_loop[0];
+  assign hw2reg.boot_exit_loop.d  = pre_load_finished_i;
+  assign hw2reg.boot_exit_loop.de = pre_load_finished_i;
+  // assign hw2reg.boot_exit_loop.d  = testbench_set_exit_loop[0];
+  // assign hw2reg.boot_exit_loop.de = testbench_set_exit_loop[0];
 `else
-  assign hw2reg.boot_exit_loop.d  = 1'b0;
-  assign hw2reg.boot_exit_loop.de = 1'b0;
+  assign hw2reg.boot_exit_loop.d  = pre_load_finished_i;
+  assign hw2reg.boot_exit_loop.de = pre_load_finished_i;
 `endif
 
   assign hw2reg.boot_select.de  = 1'b1;

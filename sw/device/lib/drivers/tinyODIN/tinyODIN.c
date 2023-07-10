@@ -11,61 +11,6 @@
 #include "tinyODIN_SRAM.h"  
 
 
-#define EPSILON 1e-8
-
-typedef struct {
-    float *parameters;
-    float *gradients;
-    float *m;
-    float *v;
-    float beta1;
-    float beta2;
-    float learning_rate;
-    int num_parameters;
-    int t;
-} AdamOptimizer;
-
-AdamOptimizer *adam_optimizer_create(float *parameters, float *gradients, float learning_rate, float beta1, float beta2, int num_parameters) {
-    AdamOptimizer *optimizer = (AdamOptimizer *)malloc(sizeof(AdamOptimizer));
-
-    optimizer->parameters = parameters;
-    optimizer->gradients = gradients;
-    optimizer->m = (float *)malloc(num_parameters * sizeof(float));
-    optimizer->v = (float *)malloc(num_parameters * sizeof(float));
-    optimizer->beta1 = beta1;
-    optimizer->beta2 = beta2;
-    optimizer->learning_rate = learning_rate;
-    optimizer->num_parameters = num_parameters;
-    optimizer->t = 0;
-
-    // 初始化 m 和 v
-    for (int i = 0; i < num_parameters; i++) {
-        optimizer->m[i] = 0.0;
-        optimizer->v[i] = 0.0;
-    }
-
-    return optimizer;
-}
-
-void adam_optimizer_step(AdamOptimizer *optimizer) {
-    optimizer->t += 1;
-    float lr_t = optimizer->learning_rate * sqrt(1.0 - pow(optimizer->beta2, optimizer->t)) / (1.0 - pow(optimizer->beta1, optimizer->t));
-
-    for (int i = 0; i < optimizer->num_parameters; i++) {
-        optimizer->m[i] = optimizer->beta1 * optimizer->m[i] + (1.0 - optimizer->beta1) * optimizer->gradients[i];
-        optimizer->v[i] = optimizer->beta2 * optimizer->v[i] + (1.0 - optimizer->beta2) * pow(optimizer->gradients[i], 2);
-
-        float delta = -lr_t * optimizer->m[i] / (sqrt(optimizer->v[i]) + EPSILON);
-        optimizer->parameters[i] += delta;
-    }
-}
-
-void adam_optimizer_destroy(AdamOptimizer *optimizer) {
-    free(optimizer->m);
-    free(optimizer->v);
-    free(optimizer);
-}
-
 uint32_t concat_uint32(uint32_t num1, uint32_t num2, uint32_t num3, uint32_t num4,
                        uint32_t num5, uint32_t num6, uint32_t num7, uint32_t num8) {
     uint32_t result = 0;
@@ -135,24 +80,6 @@ void tinyODIN_control_write(const tinyODIN_t *tinyODIN, const ptrdiff_t write_ad
 void tinyODIN_spike_core_write_call(const tinyODIN_t tinyODIN, uint32_t input[144]) {
   uint32_t input_spike;
   int input_spike_addr;
-    // uint32_t spike_time_input[144] = {  0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    //                                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0x45, 0x4B, 0x61, 0xFF, 0x5B, 0x5B, 0x5A, 0x52, 
-    //                                     0xFF, 0x64, 0x5F, 0x5C, 0x2E, 0x39, 0x5F, 0xFF, 
-    //                                     0x26, 0x26, 0x27, 0x27, 0xFF, 0x60, 0x36, 0x24, 
-    //                                     0x5F, 0x60, 0x64, 0xFF, 0x4E, 0x51, 0x54, 0x59, 
-    //                                     0xFF, 0x61, 0x34, 0x2A, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0x4D, 0x64, 0xFF, 0xFF, 0xFF, 0xFF, 0x50, 0x21, 
-    //                                     0xFF, 0xFF, 0xFF, 0xFF, 0x2F, 0x5F, 0xFF, 0xFF, 
-    //                                     0xFF, 0xFF, 0x61, 0x37, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0x27, 0x4E, 0x64, 0xFF, 0xFF, 0xFF, 0xFF, 0x55, 
-    //                                     0xFF, 0xFF, 0xFF, 0xFF, 0x3B, 0x29, 0x59, 0xFF, 
-    //                                     0xFF, 0xFF, 0xFF, 0x62, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0x59, 0x28, 0x39, 0x62, 0xFF, 0xFF, 0xFF, 0xFF, 
-    //                                     0x64, 0xFF, 0xFF, 0xFF, 0x64, 0x4A, 0x1D, 0x4D, 
-    //                                     0xFF, 0xFF, 0xFF, 0xFF, 0x60, 0xFF, 0xFF, 0xFF, 
-    //                                     0xFF, 0x53, 0x16, 0x30, 0xFF, 0xFF, 0xFF, 0xFF};
   for(int i=0; i<36; ++i){
     input_spike = 0;
     input_spike |= (input[i*4] & 0xFF) << 24;
@@ -168,6 +95,15 @@ void tinyODIN_spike_core_write_call(const tinyODIN_t tinyODIN, uint32_t input[14
       tinyODIN_spike_core_write(&tinyODIN, input_spike_addr, input_spike);
   }
 }
+
+void tinyODIN_neuron_core_write_call(const tinyODIN_t tinyODIN) {
+  for(ptrdiff_t i=0x00000000; i<0x00000101; i++){
+    int neuron_addr = i;
+    int neuron_data = 0x0015e000;
+    tinyODIN_neuron_core_write(&tinyODIN,neuron_addr,neuron_data);
+  }
+}
+
 
 void __attribute__ ((noinline)) tinyODIN_synaptic_init (const tinyODIN_t tinyODIN) {
   uint32_t synapse_wdata;

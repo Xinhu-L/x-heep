@@ -17,6 +17,7 @@ module ao_peripheral_subsystem
     output obi_resp_t slave_resp_o,
 
     // SOC CTRL
+    input  logic        pre_load_finished_i,
     input  logic        boot_select_i,
     input  logic        execute_from_flash_i,
     output logic        exit_valid_o,
@@ -208,6 +209,7 @@ module ao_peripheral_subsystem
       .rst_ni,
       .reg_req_i(ao_peripheral_slv_req[core_v_mini_mcu_pkg::SOC_CTRL_IDX]),
       .reg_rsp_o(ao_peripheral_slv_rsp[core_v_mini_mcu_pkg::SOC_CTRL_IDX]),
+      .pre_load_finished_i,
       .boot_select_i,
       .execute_from_flash_i,
       .use_spimemio_o(use_spimemio),

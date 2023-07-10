@@ -67,9 +67,9 @@ set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS33} [get_ports {i2s_ws_io}]
 set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports {i2s_sd_io}]
 
 ## Tri-color LD5 for TARGET_PYNQ_Z2
-set_property -dict {PACKAGE_PIN M15 IOSTANDARD LVCMOS33} [get_ports {gpio_io[15]}]
-set_property -dict {PACKAGE_PIN G14 IOSTANDARD LVCMOS33} [get_ports {gpio_io[16]}]
-set_property -dict {PACKAGE_PIN L14 IOSTANDARD LVCMOS33} [get_ports {gpio_io[17]}]
+set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVCMOS33} [get_ports {gpio_io[15]}]
+set_property -dict {PACKAGE_PIN L15 IOSTANDARD LVCMOS33} [get_ports {gpio_io[16]}]
+set_property -dict {PACKAGE_PIN N15 IOSTANDARD LVCMOS33} [get_ports {gpio_io[17]}]
 
 set_property -dict {PACKAGE_PIN W6 IOSTANDARD LVCMOS33} [get_ports {spi2_csb_o[0]}]
 set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS33} [get_ports {spi2_csb_o[1]}]
@@ -82,4 +82,5 @@ set_property -dict {PACKAGE_PIN W13 IOSTANDARD LVCMOS33} [get_ports {i2c_scl_io}
 set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports {i2c_sda_io}]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_tck_i_IBUF]
+
 
